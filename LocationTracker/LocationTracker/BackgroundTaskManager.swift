@@ -11,9 +11,9 @@ import UIKit
 
 class BackgroundTaskManager: LocationTrackerFile {
     
-    private var masterTaskId: UIBackgroundTaskIdentifier!
-    private var bgTaskIdList: NSMutableArray!
-    private static let sharedBGTaskManager = BackgroundTaskManager()
+    fileprivate var masterTaskId: UIBackgroundTaskIdentifier!
+    fileprivate var bgTaskIdList: NSMutableArray!
+    fileprivate static let sharedBGTaskManager = BackgroundTaskManager()
     
     override init() {
         super.init()
@@ -26,17 +26,17 @@ class BackgroundTaskManager: LocationTrackerFile {
     }
     
     func beginNewBackgroundTask() -> UIBackgroundTaskIdentifier {
-        let application = UIApplication.sharedApplication()
+        let application = UIApplication.shared
         var bgTaskId = UIBackgroundTaskInvalid
-        if application.respondsToSelector(#selector(UIApplication.beginBackgroundTaskWithExpirationHandler(_:))){
-            bgTaskId = application.beginBackgroundTaskWithExpirationHandler({
+        if application.responds(to: #selector(UIApplication.beginBackgroundTask(expirationHandler:)(_:))){
+            bgTaskId = application.beginBackgroundTask(expirationHandler: {
 
             })
             if self.masterTaskId == UIBackgroundTaskInvalid {
                 self.masterTaskId = bgTaskId
             }
             else {
-                self.bgTaskIdList.addObject(bgTaskId)
+                self.bgTaskIdList.add(bgTaskId)
                 self.endBackgroundTasks()
             }
         }
@@ -51,15 +51,15 @@ class BackgroundTaskManager: LocationTrackerFile {
         self.drainBGTaskList(true)
     }
     
-    func drainBGTaskList(all: Bool) {
-        let application: UIApplication = UIApplication.sharedApplication()
-        if application.respondsToSelector(#selector(UIApplication.endBackgroundTask(_:))) {
+    func drainBGTaskList(_ all: Bool) {
+        let application: UIApplication = UIApplication.shared
+        if application.responds(to: #selector(UIApplication.endBackgroundTask(_:))) {
             let count = self.bgTaskIdList.count
             for _ in ((all ? 0 : 1)..<count){
 //            for var i = (all ? 0 : 1); i < count; i += 1 {
-                let bgTaskId: UIBackgroundTaskIdentifier = self.bgTaskIdList.objectAtIndex(0).integerValue
+                let bgTaskId: UIBackgroundTaskIdentifier = (self.bgTaskIdList.object(at: 0) as AnyObject).intValue
                 application.endBackgroundTask(bgTaskId)
-                self.bgTaskIdList.removeObjectAtIndex(0)
+                self.bgTaskIdList.removeObject(at: 0)
             }
             if self.bgTaskIdList.count > 0 {
             }

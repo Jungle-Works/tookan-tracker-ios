@@ -9,12 +9,12 @@
 import UIKit
 import CocoaMQTT
 
-public class MqttClass: NSObject {
+open class MqttClass: NSObject {
     
     static let sharedInstance = MqttClass()
     var mqtt: CocoaMQTT?
     var didConnectAck = false
-    var hostAddress = "test.tookanapp.com"
+    var hostAddress = "tracking.tookan.io"//"test.tookanapp.com"
     var portNumber:UInt16 = 1883
     var accessToken = ""
     var key = ""
@@ -24,7 +24,7 @@ public class MqttClass: NSObject {
     }
     
     func mqttSetting() {
-        let clientIdPid = "CocoaMQTT--" + String(NSProcessInfo().processIdentifier)
+        let clientIdPid = "CocoaMQTT--" + String(ProcessInfo().processIdentifier)
         mqtt = CocoaMQTT(clientId: clientIdPid, host: hostAddress, port:portNumber)
         //mqtts
         if let mqtt = mqtt {
@@ -36,25 +36,35 @@ public class MqttClass: NSObject {
         }
     }
     
-    func sendLocation(location:String) {
+    func sendLocation(_ location:String) {
         if IJReachability.isConnectedToNetwork() == true {
             if(didConnectAck == true) {
-                NSUserDefaults.standardUserDefaults().setBool(true, forKey: USER_DEFAULT.isHitInProgress)
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                UserDefaults.standard.set(true, forKey: USER_DEFAULT.isHitInProgress)
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
                 let sendData = ["access_token":accessToken,
                                 "key":key,
                                 "location":"\(location)"]
+                print("Send Data = \(sendData)")
                 let sendDataArray = NSMutableArray()
-                sendDataArray.addObject(sendData)
-                mqtt!.publish("UpdateLocation", withString:sendDataArray.jsonString , qos: .QOS1)
+                sendDataArray.add(sendData)
+                mqtt!.publish("UpdateLocation", withString:sendDataArray.jsonString , qos: .qos1)
             } else {
-                if(mqtt?.connState == CocoaMQTTConnState.DISCONNECTED) {
+                if(mqtt?.connState == CocoaMQTTConnState.disconnected) {
                     self.mqttSetting()
                     self.connectToServer()
                 }
             }
         }
     }
+    
+    func stopLocation() {
+        let sendData = ["access_token":accessToken,
+                        "key":key]
+        let sendDataArray = NSMutableArray()
+        sendDataArray.add(sendData)
+        mqtt!.publish("StopTracking", withString:sendDataArray.jsonString , qos: .qos1)
+    }
+    
     func disconnect() {
         mqtt!.disconnect()
     }
@@ -63,13 +73,13 @@ public class MqttClass: NSObject {
 
 extension MqttClass: CocoaMQTTDelegate {
     
-    public func mqtt(mqtt: CocoaMQTT, didConnect host: String, port: Int) {
+    public func mqtt(_ mqtt: CocoaMQTT, didConnect host: String, port: Int) {
         print("didConnect \(host):\(port)")
     }
     
-    public func mqtt(mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        if ack == .ACCEPT {
-            mqtt.subscribe("UpdateLocation", qos: CocoaMQTTQOS.QOS1)
+    public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        if ack == .accept {
+            mqtt.subscribe(self.accessToken, qos: CocoaMQTTQOS.qos1)
             mqtt.ping()
             didConnectAck = true
             //mqtt.publish("UpdateLocation", withString:"Hello" , qos: .QOS1)
@@ -77,72 +87,72 @@ extension MqttClass: CocoaMQTTDelegate {
         
     }
     
-    public func mqtt(mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+    public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         print("didPublishMessage with message: \(message.string)")
-    }
-    
-    public func mqtt(mqtt: CocoaMQTT, didPublishAck id: UInt16) {
-        print("didPublishAck with id: \(id)")
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: USER_DEFAULT.isHitInProgress)
-    }
-    
-    public func mqtt(mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
-        print("didReceivedMessage: \(message.string) with id \(id)")
         var locationArray = NSMutableArray()
-        if let array = NSUserDefaults.standardUserDefaults().objectForKey(USER_DEFAULT.locationArray) as? NSMutableArray {
+        if let array = UserDefaults.standard.object(forKey: USER_DEFAULT.locationArray) as? NSMutableArray {
             locationArray = NSMutableArray(array: array)
         }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         
         var sentLocationArray = NSMutableArray()
         if let sentJsonString = message.string {
             let locationObject = sentJsonString.jsonObject
-            let locationObjectArray = locationObject.objectAtIndex(0) as! NSDictionary
+            let locationObjectArray = locationObject.object(at: 0) as! NSDictionary
             let locationString = locationObjectArray["location"] as! String
             sentLocationArray = NSMutableArray(array: locationString.jsonObject)
         }
         for i in (0..<sentLocationArray.count) {
-            let sendDictionaryObject = sentLocationArray.objectAtIndex(i) as! NSDictionary
+            let sendDictionaryObject = sentLocationArray.object(at: i) as! NSDictionary
             if let sendTimeStamp = sendDictionaryObject["tm_stmp"] as? String {
                 for j in (0..<locationArray.count) {
-                    let locationDictionaryObject = locationArray.objectAtIndex(j) as! NSDictionary
+                    let locationDictionaryObject = locationArray.object(at: j) as! NSDictionary
                     if let locationTimeStamp = locationDictionaryObject["tm_stmp"] as? String {
                         if(sendTimeStamp == locationTimeStamp) {
-                            locationArray.removeObjectAtIndex(j)
+                            locationArray.removeObject(at: j)
                             break
                         }
                     }
                 }
             }
         }
-        NSUserDefaults.standardUserDefaults().setObject(locationArray, forKey: USER_DEFAULT.locationArray)
-        NSUserDefaults.standardUserDefaults().synchronize()
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: USER_DEFAULT.isHitInProgress)
+        UserDefaults.standard.set(locationArray, forKey: USER_DEFAULT.locationArray)
+        UserDefaults.standard.synchronize()
+        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
     }
     
-    public func mqtt(mqtt: CocoaMQTT, didSubscribeTopic topic: String) {
+    public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+        print("didPublishAck with id: \(id)")
+        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
+    }
+    
+    public func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        print("didReceivedMessage: \(message.string) with id \(id)")
+    }
+    
+    public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topic: String) {
         print("didSubscribeTopic to \(topic)")
     }
     
-    public func mqtt(mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
+    public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
         print("didUnsubscribeTopic to \(topic)")
     }
     
-    public func mqttDidPing(mqtt: CocoaMQTT) {
+    public func mqttDidPing(_ mqtt: CocoaMQTT) {
         print("didPing")
     }
     
-    public func mqttDidReceivePong(mqtt: CocoaMQTT) {
+    public func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
         _console("didReceivePong")
     }
     
-    public func mqttDidDisconnect(mqtt: CocoaMQTT, withError err: NSError?) {
+    public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: NSError?) {
         didConnectAck = false
         _console("mqttDidDisconnect")
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: USER_DEFAULT.isHitInProgress)
+        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
     }
     
-    func _console(info: String) {
+    func _console(_ info: String) {
         print("Delegate: \(info)")
     }
 }

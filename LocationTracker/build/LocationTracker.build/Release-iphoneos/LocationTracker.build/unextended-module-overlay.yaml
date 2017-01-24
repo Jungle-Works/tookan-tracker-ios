@@ -3,7 +3,7 @@
   'case-sensitive': 'false',
   'roots': [{
     'type': 'directory',
-    'name': '/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Products/Release-iphoneos/LocationTracker.framework/Modules'
+    'name': '/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Intermediates/SwiftMigration/LocationTrackerUniversal/Products/Release-iphoneos/LocationTracker.framework/Modules'
     'contents': [{
       'type': 'file',
       'name': 'module.modulemap',

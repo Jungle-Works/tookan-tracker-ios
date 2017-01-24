@@ -14,57 +14,58 @@ import UIKit
 import SystemConfiguration
 
 @objc public protocol LocationTrackerDelegate {
-    optional func currentLocation(location:CLLocation)
+    @objc optional func currentLocation(_ location:CLLocation)
 }
 
 
 public enum LocationFrequency: Int {
-    case LOW = 0
-    case MEDIUM
-    case HIGH
+    case low = 0
+    case medium
+    case high
 }
 
-public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
+open class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
     
-    public var delegate:LocationTrackerDelegate!
-    public var host = "test.tookanapp.com"
-    public var portNumber:UInt16 = 1883
-    public var slotTime = 5.0
-    public var maxSpeed:Float = 30.0
-    public var maxAccuracy = 20.0
-    public var maxDistance = 20.0
-    public var locationFrequencyMode = LocationFrequency.HIGH
-    public var accessToken:String = ""
-    public var uniqueKey:String = ""
+    open var delegate:LocationTrackerDelegate!
+    fileprivate var host = "tracking.tookan.io"
+    fileprivate var portNumber:UInt16 = 1883
+    fileprivate var slotTime = 5.0
+    fileprivate var maxSpeed:Float = 30.0
+    fileprivate var maxAccuracy = 20.0
+    fileprivate var maxDistance = 20.0
+    open var locationFrequencyMode = LocationFrequency.high
+    open var accessToken:String = ""
+    open var uniqueKey:String = ""
     
-    private static let locationManagerObj = CLLocationManager()
-    private static let locationTracker = LocationTrackerFile()
+    fileprivate static let locationManagerObj = CLLocationManager()
+    fileprivate static let locationTracker = LocationTrackerFile()
     
-    private var myLastLocation: CLLocation!
-    private var myLocation: CLLocation!
-    private var myLocationAccuracy: CLLocationAccuracy!
-    private var locationUpdateTimer: NSTimer!
-    private var locationManager:CLLocationManager!
-    private var speed:Float = 0
-    private var bgTask: BackgroundTaskManager?
+    fileprivate var myLastLocation: CLLocation!
+    fileprivate var myLocation: CLLocation!
+    fileprivate var myLocationAccuracy: CLLocationAccuracy!
+    fileprivate var locationUpdateTimer: Timer!
+    fileprivate var locationManager:CLLocationManager!
+    fileprivate var speed:Float = 0
+    fileprivate var bgTask: BackgroundTaskManager?
     
+    let SDKVersion = "1.0"
     
     override init() {
         super.init()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LocationTrackerFile.applicationEnterBackground), name: UIApplicationDidEnterBackgroundNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LocationTrackerFile.appEnterInTerminateState), name: UIApplicationWillTerminateNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LocationTrackerFile.enterInForegroundFromBackground), name: UIApplicationWillEnterForegroundNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LocationTrackerFile.becomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: USER_DEFAULT.isHitInProgress)
-        UIDevice.currentDevice().batteryMonitoringEnabled = true
+        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.applicationEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.appEnterInTerminateState), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.enterInForegroundFromBackground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.becomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
+        UIDevice.current.isBatteryMonitoringEnabled = true
     }
     
     
-    public class func sharedInstance() -> LocationTrackerFile {
+    open class func sharedInstance() -> LocationTrackerFile {
         return locationTracker
     }
     
-    public class func sharedLocationManager() -> CLLocationManager {
+    open class func sharedLocationManager() -> CLLocationManager {
         return locationManagerObj
     }
     
@@ -72,27 +73,27 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         self.setLocationUpdate()
         self.bgTask = BackgroundTaskManager.sharedBackgroundTaskManager()
         self.bgTask!.beginNewBackgroundTask()
-        NSUserDefaults.standardUserDefaults().setValue("Background", forKey: USER_DEFAULT.applicationMode)
+        UserDefaults.standard.setValue("Background", forKey: USER_DEFAULT.applicationMode)
         self.updateLocationToServer()
         if(self.locationUpdateTimer != nil) {
             self.locationUpdateTimer.invalidate()
             self.locationUpdateTimer = nil
         }
-        self.locationUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
+        self.locationUpdateTimer = Timer.scheduledTimer(timeInterval: slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
     }
     
     func enterInForegroundFromBackground(){
-        NSUserDefaults.standardUserDefaults().setValue("Foreground", forKey: USER_DEFAULT.applicationMode)
+        UserDefaults.standard.setValue("Foreground", forKey: USER_DEFAULT.applicationMode)
         self.updateLocationToServer()
         if(self.locationUpdateTimer != nil) {
             self.locationUpdateTimer.invalidate()
             self.locationUpdateTimer = nil
         }
-        self.locationUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(self.slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
+        self.locationUpdateTimer = Timer.scheduledTimer(timeInterval: self.slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
     }
     
     func appEnterInTerminateState() {
-        NSUserDefaults.standardUserDefaults().setValue("Terminate", forKey: USER_DEFAULT.applicationMode)
+        UserDefaults.standard.setValue("Terminate", forKey: USER_DEFAULT.applicationMode)
         if(self.locationManager != nil) {
             self.locationManager.stopUpdatingLocation()
             self.locationManager.startMonitoringSignificantLocationChanges()
@@ -105,15 +106,15 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         }
     }
 
-    public func getCurrentLocation() -> CLLocation {
+    open func getCurrentLocation() -> CLLocation {
         if(self.myLocation == nil) {
             return CLLocation()
         }
         return self.myLocation
     }
     
-    private func setLocationUpdate() {
-        if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isLocationTrackingRunning) == true) {
+    fileprivate func setLocationUpdate() {
+        if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true) {
             MqttClass.sharedInstance.mqttSetting()
             MqttClass.sharedInstance.connectToServer()
             if(self.locationManager != nil) {
@@ -123,7 +124,7 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
             self.setFrequency()
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            locationManager.activityType = CLActivityType.AutomotiveNavigation
+            locationManager.activityType = CLActivityType.automotiveNavigation
             locationManager.pausesLocationUpdatesAutomatically = false
             if(maxDistance == 0) {
                 locationManager.distanceFilter = kCLDistanceFilterNone
@@ -142,24 +143,24 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
     }
     
     
-     private func setFrequency() {
+     fileprivate func setFrequency() {
         switch locationFrequencyMode {
-        case LocationFrequency.LOW:
+        case LocationFrequency.low:
             slotTime = 60.0
             maxDistance = 100.0
             break
-        case LocationFrequency.MEDIUM:
+        case LocationFrequency.medium:
             slotTime = 30.0
             maxDistance = 50.0
             break
-        case LocationFrequency.HIGH:
+        case LocationFrequency.high:
             slotTime = 5.0
             maxDistance = 20.0
             break
         }
     }
     
-    private func restartLocationUpdates() {
+    fileprivate func restartLocationUpdates() {
         if(self.locationUpdateTimer != nil) {
             self.locationUpdateTimer.invalidate()
             self.locationUpdateTimer = nil
@@ -170,63 +171,70 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
                 
         setLocationUpdate()
         self.updateLocationToServer()
-        self.locationUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
+        self.locationUpdateTimer = Timer.scheduledTimer(timeInterval: slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
     }
     
-    public func startLocationTracking() {
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: USER_DEFAULT.isLocationTrackingRunning)
-        setLocationUpdate()
-        if(self.locationUpdateTimer != nil) {
-            self.locationUpdateTimer?.invalidate()
-            self.locationUpdateTimer = nil
+    open func startLocationTracking() -> (Bool, String) {
+        let response = self.isAllPermissionAuthorized()
+        if(response.0 == true) {
+            UserDefaults.standard.set(true, forKey: USER_DEFAULT.isLocationTrackingRunning)
+            setLocationUpdate()
+            if(self.locationUpdateTimer != nil) {
+                self.locationUpdateTimer?.invalidate()
+                self.locationUpdateTimer = nil
+            }
+            self.updateLocationToServer()
+            self.locationUpdateTimer = Timer.scheduledTimer(timeInterval: self.slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
         }
-        self.updateLocationToServer()
-        self.locationUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(self.slotTime, target: self, selector: #selector(LocationTrackerFile.updateLocationToServer), userInfo: nil, repeats: true)
+        return response
     }
     
-    public func stopLocationTracking() {
+    open func stopLocationTracking() {
         if(self.locationUpdateTimer != nil) {
             self.locationUpdateTimer.invalidate()
             self.locationUpdateTimer = nil
         }
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: USER_DEFAULT.isLocationTrackingRunning)
-        MqttClass.sharedInstance.disconnect()
         let locationManager: CLLocationManager = LocationTrackerFile.sharedLocationManager()
         locationManager.stopUpdatingLocation()
+        
+       // MqttClass.sharedInstance.stopLocation()
+        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isLocationTrackingRunning)
+        MqttClass.sharedInstance.disconnect()
+        
     }
     
-    public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    open func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.bgTask = BackgroundTaskManager.sharedBackgroundTaskManager()
         self.bgTask!.beginNewBackgroundTask()
         if locations.last != nil {
             self.myLocation = locations.last! as CLLocation
             self.myLocationAccuracy = self.myLocation.horizontalAccuracy
             self.applyFilterOnGetLocation()
-            if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isLocationTrackingRunning) == true) {
+            if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true) {
                 delegate.currentLocation!(self.myLocation)
             }
         }
     }
     
-    private func applyFilterOnGetLocation() {
+    fileprivate func applyFilterOnGetLocation() {
         if self.myLocation != nil  {
             var locationArray = NSMutableArray()
-            if let array = NSUserDefaults.standardUserDefaults().objectForKey(USER_DEFAULT.locationArray) as? NSMutableArray {
+            if let array = UserDefaults.standard.object(forKey: USER_DEFAULT.locationArray) as? NSMutableArray {
                 locationArray = NSMutableArray(array: array)
             }
-            if NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isLocationTrackingRunning) == true {
+            if UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true {
                 if(self.myLocationAccuracy < maxAccuracy){
                     if(self.myLastLocation == nil) {
                         var myLocationToSend = NSMutableDictionary()
                         let timestamp = String().getUTCDateString
-                        myLocationToSend = ["lat" : myLocation!.coordinate.latitude as Double,"lng" :myLocation!.coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.currentDevice().batteryLevel * 100, "acc":(self.myLocationAccuracy != nil ? self.myLocationAccuracy! : 300)]
+                        myLocationToSend = ["lat" : myLocation!.coordinate.latitude as Double,"lng" :myLocation!.coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.current.batteryLevel * 100, "acc":(self.myLocationAccuracy != nil ? self.myLocationAccuracy! : 300)]
                         self.addFilteredLocationToLocationArray(myLocationToSend)
                         self.myLastLocation = self.myLocation
                     } else {
                         if(self.getSpeed() < maxSpeed) {
                             var myLocationToSend = NSMutableDictionary()
                             let timestamp = String().getUTCDateString
-                            myLocationToSend = ["lat" : myLocation!.coordinate.latitude as Double,"lng" :myLocation!.coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.currentDevice().batteryLevel * 100, "acc":(self.myLocationAccuracy != nil ? self.myLocationAccuracy! : 300)]
+                            myLocationToSend = ["lat" : myLocation!.coordinate.latitude as Double,"lng" :myLocation!.coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.current.batteryLevel * 100, "acc":(self.myLocationAccuracy != nil ? self.myLocationAccuracy! : 300)]
                             self.addFilteredLocationToLocationArray(myLocationToSend)
                             self.myLastLocation = self.myLocation
                         }
@@ -235,7 +243,7 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
             }
             
           //  if(NSUserDefaults.standardUserDefaults().valueForKey(USER_DEFAULT.applicationMode) != nil && (NSUserDefaults.standardUserDefaults().valueForKey(USER_DEFAULT.applicationMode) as! String == "Background" || NSUserDefaults.standardUserDefaults().valueForKey(USER_DEFAULT.applicationMode) as! String == "Terminate")) {
-                if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isHitInProgress) == false) {
+                if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isHitInProgress) == false) {
                     if locationArray.count >= 5 {
                         let locationString = locationArray.jsonString
                         sendRequestToServer(locationString)
@@ -245,28 +253,28 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         }
     }
     
-    private func addFilteredLocationToLocationArray(myLocationToSend:NSMutableDictionary) {
-        if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isLocationTrackingRunning) == true){
+    fileprivate func addFilteredLocationToLocationArray(_ myLocationToSend:NSMutableDictionary) {
+        if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true){
             var locationArray = NSMutableArray()
-            if let array = NSUserDefaults.standardUserDefaults().objectForKey(USER_DEFAULT.locationArray) as? NSMutableArray {
+            if let array = UserDefaults.standard.object(forKey: USER_DEFAULT.locationArray) as? NSMutableArray {
                 locationArray = NSMutableArray(array: array)
             }
             if(locationArray.count >= 1000) {
-                locationArray.removeObjectAtIndex(0)
+                locationArray.removeObject(at: 0)
             }
-            locationArray.addObject(myLocationToSend)
-            NSUserDefaults.standardUserDefaults().setObject(locationArray, forKey: USER_DEFAULT.locationArray)
+            locationArray.add(myLocationToSend)
+            UserDefaults.standard.set(locationArray, forKey: USER_DEFAULT.locationArray)
         }
     }
     
     
      func updateLocationToServer() {
         var locationArray = NSMutableArray()
-        if let array = NSUserDefaults.standardUserDefaults().objectForKey(USER_DEFAULT.locationArray) as? NSMutableArray {
+        if let array = UserDefaults.standard.object(forKey: USER_DEFAULT.locationArray) as? NSMutableArray {
             locationArray = NSMutableArray(array: array)
         }
         if IJReachability.isConnectedToNetwork(){
-            if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isHitInProgress) == false) {
+            if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isHitInProgress) == false) {
                 if locationArray.count > 0 {
                     let locationString = locationArray.jsonString
                     sendRequestToServer(locationString)
@@ -275,8 +283,8 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         }
     }
     
-    private func sendRequestToServer(locationString:String) {
-        if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isLocationTrackingRunning) == true) {
+    fileprivate func sendRequestToServer(_ locationString:String) {
+        if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true) {
             MqttClass.sharedInstance.hostAddress = self.host
             MqttClass.sharedInstance.portNumber = self.portNumber
             MqttClass.sharedInstance.accessToken = self.accessToken
@@ -285,21 +293,21 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         }
     }
     
-    private func updateLastSavedLocationOnServer() {
-        if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isLocationTrackingRunning) == true) {
+    fileprivate func updateLastSavedLocationOnServer() {
+        if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true) {
             var locationArray = NSMutableArray()
-            if let array = NSUserDefaults.standardUserDefaults().objectForKey(USER_DEFAULT.locationArray) as? NSMutableArray {
+            if let array = UserDefaults.standard.object(forKey: USER_DEFAULT.locationArray) as? NSMutableArray {
                 locationArray = NSMutableArray(array: array)
             }
             self.setLocationUpdate()
-            if(NSUserDefaults.standardUserDefaults().boolForKey(USER_DEFAULT.isHitInProgress) == false) {
+            if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isHitInProgress) == false) {
                 if(locationArray.count > 0) {
                     sendRequestToServer(locationArray.jsonString)
                 } else {
                     var myLocationToSend = NSMutableDictionary()
-                    myLocationToSend = ["bat_lvl" : UIDevice.currentDevice().batteryLevel * 100]
+                    myLocationToSend = ["bat_lvl" : UIDevice.current.batteryLevel * 100]
                     let highLocationArray = NSMutableArray()
-                    highLocationArray.addObject(myLocationToSend)
+                    highLocationArray.add(myLocationToSend)
                     let locationString = highLocationArray.jsonString
                     sendRequestToServer(locationString)
                 }
@@ -307,14 +315,14 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         }
     }
     
-    private func getSpeed() -> Float {
+    fileprivate func getSpeed() -> Float {
         if(myLastLocation != nil) {
-            let time = self.myLocation.timestamp.timeIntervalSinceDate(myLastLocation.timestamp)
-            let distance:CLLocationDistance = myLocation.distanceFromLocation(myLastLocation)
+            let time = self.myLocation.timestamp.timeIntervalSince(myLastLocation.timestamp)
+            let distance:CLLocationDistance = myLocation.distance(from: myLastLocation)
             if(distance > 200) {
                 self.locationManager.stopUpdatingLocation()
                 if let json = NetworkingHelper.sharedInstance.getLatLongFromDirectionAPI("\(myLastLocation.coordinate.latitude),\(myLastLocation.coordinate.longitude)", destination: "\(myLocation.coordinate.latitude),\(myLocation.coordinate.longitude)") {
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     if let routes = json["routes"] {
                         if(routes.count > 0) {
                             if let legs = routes[0]["legs"]!{
@@ -326,7 +334,7 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
                                             for i in (0..<locations.count) {
                                                 var myLocationToSend = NSMutableDictionary()
                                                 let timestamp = String().getUTCDateString
-                                                myLocationToSend = ["lat" : locations[i].coordinate.latitude as Double,"lng" :locations[i].coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.currentDevice().batteryLevel * 100,"acc":(self.myLocationAccuracy != nil ? self.myLocationAccuracy! : 300)]
+                                                myLocationToSend = ["lat" : locations[i].coordinate.latitude as Double,"lng" :locations[i].coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.current.batteryLevel * 100,"acc":(self.myLocationAccuracy != nil ? self.myLocationAccuracy! : 300)]
                                                
                                                 self.addFilteredLocationToLocationArray(myLocationToSend)
                                                 self.myLastLocation = CLLocation(latitude: locations[i].coordinate.latitude, longitude: locations[i].coordinate.longitude)
@@ -338,7 +346,7 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
                             }
                         }
                     } else {
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
                         self.setLocationUpdate()
                         speed = Float(distance) / Float(time)
                         if(speed > 0) {
@@ -347,7 +355,7 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
                         return 0.0
                     }
                 } else {
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     self.setLocationUpdate()
                     speed = Float(distance) / Float(time)
                     if(speed > 0) {
@@ -367,23 +375,23 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         return 0.0
     }
     
-    public func isAllPermissionAuthorized() -> (Bool, String) {
+    fileprivate func isAllPermissionAuthorized() -> (Bool, String) {
         //We have to make sure that the Background App Refresh is enable for the Location updates to work in the background.
-        if(UIApplication.sharedApplication().backgroundRefreshStatus == UIBackgroundRefreshStatus.Denied) {
+        if(UIApplication.shared.backgroundRefreshStatus == UIBackgroundRefreshStatus.denied) {
             return (false,"The app doesn't work without the Background App Refresh enabled.")
-        } else if (UIApplication.sharedApplication().backgroundRefreshStatus == UIBackgroundRefreshStatus.Restricted) {
+        } else if (UIApplication.shared.backgroundRefreshStatus == UIBackgroundRefreshStatus.restricted) {
             return (false,"The app doesn't work without the Background App Refresh enabled.")
         } else {
             return self.isAppLocationEnabled()
         }
     }
     
-    private func isAppLocationEnabled() -> (Bool,String) {
+    fileprivate func isAppLocationEnabled() -> (Bool,String) {
         if CLLocationManager.locationServicesEnabled() == false {
             return (false,"Background Location Access Disabled")
         } else {
             let authorizationStatus = CLLocationManager.authorizationStatus()
-            if authorizationStatus == CLAuthorizationStatus.Denied || authorizationStatus == CLAuthorizationStatus.Restricted {
+            if authorizationStatus == CLAuthorizationStatus.denied || authorizationStatus == CLAuthorizationStatus.restricted {
                 return (false,"Background Location Access Disabled")
             } else {
                 return self.isAuthorizedUser()
@@ -391,8 +399,21 @@ public class LocationTrackerFile:NSObject, CLLocationManagerDelegate {
         }
     }
     
-    private func isAuthorizedUser() -> (Bool,String) {
-        let params = ["u_socket_id":uniqueKey,"f_socket_id":self.accessToken]
+    fileprivate func isAuthorizedUser() -> (Bool,String) {
+        let params = ["u_socket_id":uniqueKey,
+                      "f_socket_id":self.accessToken,
+                      "sdk_version":SDKVersion,
+                      "timezone":NSTimeZone.system.secondsFromGMT() / 60,
+                      "frequency":"\(self.locationFrequencyMode.rawValue)",
+                      "device_details":["device_type":"1",
+                                        "device_name":UIDevice.current.name,
+                                        "imei":"",
+                                        "os":(UIDevice.current.systemVersion as NSString).doubleValue,
+                                        "manufacturer":"Apple",
+                                        "model":UIDevice.current.modelName,
+                                        "locale": Locale.current.identifier
+                                        ]] as [String : Any]
+        print(params)
         let jsonResponse = NetworkingHelper.sharedInstance.getValidation("validate", params: params)
         if(jsonResponse.0 == true) {
             let json = jsonResponse.1

@@ -4,12 +4,12 @@
   'roots': [
     {
       'type': 'directory',
-      'name': "/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Products/Release-iphonesimulator/LocationTracker.framework/Headers",
+      'name': "/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Intermediates/SwiftMigration/LocationTrackerUniversal/Products/Release-iphonesimulator/LocationTracker.framework/Headers",
       'contents': [
         {
           'type': 'file',
           'name': "LocationTracker-Swift.h",
-          'external-contents': "/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Products/Release-iphonesimulator/LocationTracker.framework/Headers/LocationTracker-Swift.h"
+          'external-contents': "/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Intermediates/SwiftMigration/LocationTrackerUniversal/Products/Release-iphonesimulator/LocationTracker.framework/Headers/LocationTracker-Swift.h"
         },
         {
           'type': 'file',
@@ -20,7 +20,7 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Products/Release-iphonesimulator/LocationTracker.framework/Modules",
+      'name': "/Users/cl-macmini-45/Library/Developer/Xcode/DerivedData/LocationTracker-brexdrbwudlutcbpkncbpgloflbm/Build/Intermediates/SwiftMigration/LocationTrackerUniversal/Products/Release-iphonesimulator/LocationTracker.framework/Modules",
       'contents': [
         {
           'type': 'file',
