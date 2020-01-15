@@ -10,8 +10,7 @@ import UIKit
 import TookanTracker
 import CoreLocation
 
-//let userID = "1"
-let apiKey = "29467f943f993582d956931e979a3566"
+let apiKey = "546b6480f1075f02431774714310214114e7ccf22ad87d3b581d"
 
 struct USER_DEFAULT {
     static let isSessionExpire = "isSessionExpire"
@@ -30,14 +29,12 @@ struct USER_DEFAULT {
 
 
 class ViewController: UIViewController, TookanTrackerDelegate {
-    
-    //    let loc = LocationTrackerFile.sharedInstance()
+
     var getLocationTimer:Timer!
     let SCREEN_SIZE = UIScreen.main.bounds
     var sessionId = ""
     @IBOutlet var emailTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
-//    @IBOutlet var textFieldBottomView: UIView!
     @IBOutlet var topLabel: UILabel!
     @IBOutlet var signInButton: UIButton!
     @IBOutlet var signup: UIButton!
@@ -61,7 +58,6 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         
         self.setTopLabel()
         self.setTextField()
-//        self.setBottomView()
         self.setSignInButton()
         self.setSignUpButton()
         self.navigationController?.isNavigationBarHidden = true
@@ -78,7 +74,7 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     func setTextField() {
         self.emailTextField.placeholder = "Email"
-        self.passwordTextField.placeholder = "Password"
+        self.passwordTextField.placeholder = "Enter Job Id"
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
     }
@@ -88,20 +84,16 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         self.passwordTextField.resignFirstResponder()
     }
     
-//    func setBottomView() {
-//        self.textFieldBottomView.backgroundColor = UIColor.black
-//    }
-    
     func setSignInButton() {
         self.signInButton.layer.cornerRadius = 25.0
-        self.signInButton.setTitle("Sign In", for: .normal)
+        self.signInButton.setTitle("Start Tarcking", for: .normal)
         self.signInButton.backgroundColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
         self.signInButton.setTitleColor(UIColor.white, for: .normal)
     }
     
     func setSignUpButton() {
         self.signup.layer.cornerRadius = 25.0
-        self.signup.setTitle("Sign Up", for: .normal)
+        self.signup.setTitle("Start Tracking For Agent", for: .normal)
         self.signup.backgroundColor = UIColor.white
         self.signup.setTitleColor(UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0), for: .normal)
     }
@@ -113,21 +105,20 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signInAction(_ sender: Any) {
         
-        var param:[String:Any] = ["email":"\(self.emailTextField.text ?? "")" ]
-        param["password"] = "\(self.passwordTextField.text ?? "")"
-        param["role"] = 0
+        var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
+        param["job_id"] = "436463"
+        param["user_id"] = "27278"
+        param["request_type"] = "1"
+        param["fleet_tracking"] = "1"
         
         print(param)
-        Networking.sharedInstance.commonServerCall(apiName: "log_in", params: param as [String : AnyObject]?, httpMethod: HTTP_METHOD.POST) { (isSucceeded, response) in
+        Networking.sharedInstance.commonServerCall(apiName: "create_sdk_tracking_session", params: param as [String : AnyObject]?, httpMethod: HTTP_METHOD.POST) { (isSucceeded, response) in
             DispatchQueue.main.async {
                 print(response)
                 if isSucceeded == true {
                     if let status = response["status"] as? Int {
                         switch status {
                         case STATUS_CODES.SHOW_DATA:
-//                            let controller  = self.storyboard?.instantiateViewController(withIdentifier:"OTPController") as! OTPController
-//                            controller.mobileNo = "+91\(self.emailTextField.text ?? "")"
-//                            self.navigationController?.pushViewController(controller, animated: true)
                             UserDefaults.standard.set(false, forKey: USER_DEFAULT.isSessionExpire)
                             UserDefaults.standard.set("\(self.emailTextField.text ?? "")", forKey: USER_DEFAULT.userId)
                             TookanTracker.shared.delegate = self
@@ -135,7 +126,6 @@ class ViewController: UIViewController, TookanTrackerDelegate {
                             break
                         case STATUS_CODES.INVALID_ACCESS_TOKEN:
                             UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                            print(response["message"] as? String ?? "somthingWrong")
                             break
                         default:
                             UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
@@ -156,8 +146,38 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signupAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-        let controller  = self.storyboard?.instantiateViewController(withIdentifier:"SignupViewController") as! SignupViewController
-        self.navigationController?.pushViewController(controller, animated: true)
+        var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
+        param["fleet_id"] = "33857" //"\(self.passwordTextField.text ?? "")"
+        param["user_id"] = "27278"
+        param["request_type"] = "1"
+
+        print(param)
+        Networking.sharedInstance.commonServerCall(apiName: "sdk_track_agent", params: param as [String : AnyObject]?, httpMethod: HTTP_METHOD.POST) { (isSucceeded, response) in
+                    DispatchQueue.main.async {
+                        print(response)
+                        if isSucceeded == true {
+                            if let status = response["status"] as? Int {
+                                switch status {
+                                case STATUS_CODES.SHOW_DATA:
+                                    UserDefaults.standard.set(false, forKey: USER_DEFAULT.isSessionExpire)
+                                    UserDefaults.standard.set("\(self.emailTextField.text ?? "")", forKey: USER_DEFAULT.userId)
+                                    TookanTracker.shared.delegate = self
+                                    TookanTracker.shared.createSession(userID:"27278", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
+                                    break
+                                case STATUS_CODES.INVALID_ACCESS_TOKEN:
+                                    UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
+                                    break
+                                default:
+                                    UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
+                                    break
+                                }
+                            }
+                        } else {
+                            UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
+                            print(response["message"] as? String ?? "somthingWrong")
+                        }
+                    }
+                }
         
     }
     
