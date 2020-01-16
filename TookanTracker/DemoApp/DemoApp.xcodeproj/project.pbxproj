@@ -26,7 +26,6 @@
 		26F5BDDC1FC83335000D2715 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26F5BDDA1FC83335000D2715 /* Main.storyboard */; };
 		26F5BDDE1FC83335000D2715 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26F5BDDD1FC83335000D2715 /* Assets.xcassets */; };
 		26F5BDE11FC83335000D2715 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26F5BDDF1FC83335000D2715 /* LaunchScreen.storyboard */; };
-		5E24C7FC23CF23F700929858 /* JobModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E24C7FB23CF23F700929858 /* JobModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,7 +81,6 @@
 		26F5BDDD1FC83335000D2715 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26F5BDE01FC83335000D2715 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		26F5BDE21FC83335000D2715 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5E24C7FB23CF23F700929858 /* JobModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +134,6 @@
 				26A783331FD1316D000084E0 /* Helper */,
 				26F5BDD61FC83335000D2715 /* AppDelegate.swift */,
 				2632133D1FC86F4F00E0C2AA /* OTPController.swift */,
-				5E24C7FB23CF23F700929858 /* JobModel.swift */,
 				26F5BDD81FC83335000D2715 /* ViewController.swift */,
 				2629CC3C1FCC1ED9009A37B0 /* SplashController.swift */,
 				263213401FC86FF200E0C2AA /* IJReachability.swift */,
@@ -253,7 +250,6 @@
 				2643AF621FCEF52500DBB343 /* SignupCell.swift in Sources */,
 				2632133E1FC86F4F00E0C2AA /* OTPController.swift in Sources */,
 				264719F71FCF021600E91784 /* SignupFooterView.swift in Sources */,
-				5E24C7FC23CF23F700929858 /* JobModel.swift in Sources */,
 				2643AF5B1FCEEB5800DBB343 /* SignupViewController.swift in Sources */,
 				26F5BDD91FC83335000D2715 /* ViewController.swift in Sources */,
 				26A783351FD1318E000084E0 /* CommonFunctions.swift in Sources */,

@@ -70,7 +70,48 @@ class NetworkingHelper: NSObject {
             receivedResponse(false, [:])
         }
     }
-    
+    /*---------- Start Tracking Acoording To Related Job ------------*/
+    func getLocationForJobTracking(_ sharedSecret:String, jobId:String,userId:String, receivedResponse:@escaping (_ succeeded:Bool, _ response:[String:Any]) -> ()){
+//       var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
+//       param["job_id"] = "436463"
+//       param["user_id"] = "27278"
+//       param["request_type"] = "1"
+//       param["fleet_tracking"] = "1"
+        let params = ["shared_secret":sharedSecret,
+                      "job_id":jobId,
+                      "user_id":userId,
+                      "request_type":"1",
+                      "fleet_tracking":"1"]
+        if IJReachability.isConnectedToNetwork() == true{
+            sendRequestToServer("create_sdk_tracking_session",params: params as [String : AnyObject], httpMethod: "POST") { (succeeded:Bool, response:[String:Any]) -> () in
+               if(succeeded) {
+                    switch(response["status"] as! Int) {
+                    case STATUS_CODES.SHOW_DATA, STATUS_CODES.INVALID_ACCESS_TOKEN:
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            receivedResponse(true, response)
+                        })
+                        break
+                        
+                    case STATUS_CODES.SHOW_MESSAGE:
+                        Auxillary.showAlert(response["message"] as! String!)
+                        receivedResponse(false, [:])
+                        break
+                        
+                    default:
+                        Auxillary.showAlert(response["message"] as! String!)
+                        receivedResponse(false, [:])
+                    }
+                } else{
+                    Auxillary.showAlert(STATUS_CODES.SERVER_NOT_RESPONDING)
+                    receivedResponse(false, [:])
+                }
+                
+            }
+        } else{
+            Auxillary.showAlert(STATUS_CODES.NO_INTERNET_CONNECTION)
+            receivedResponse(false, [:])
+        }
+    }
     /*------------ Start Tracking ---------------*/
     func getLocationForStartTracking(_ sessionId:String, receivedResponse:@escaping (_ succeeded:Bool, _ response:[String:Any]) -> ()) {
         let params = [
