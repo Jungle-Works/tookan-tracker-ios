@@ -23,6 +23,8 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     let loc = LocationTrackerFile.sharedInstance()
     public var delegate:TookanTrackerDelegate!
     let model = TrackerModel()
+    var agentDetailModel = AgentDetailModel(json: [:])
+    var jobData = JobModel(json: [:])
     var locationManager:CLLocationManager!
     var uiNeeded = false
     public func createSession(userID:String, apiKey: String,isUINeeded:Bool, navigationController:UINavigationController) {
@@ -38,6 +40,35 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
         self.loc.trackingDelegate = self
     }
     
+    public func startTarckingByJob(sharedSecertId: String, jobId: String, userId: String){
+        NetworkingHelper.sharedInstance.getLocationForJobTracking(sharedSecert: sharedSecertId, jobId: jobId, userId: userId) { (isSucceeded, response) in
+            DispatchQueue.main.async {
+                print(response)
+                if isSucceeded == true{
+                    if let data = response["data"] as? [String:Any]{
+                        self.jobData = JobModel(json: data)
+                    }
+                } else {
+                    self.model.resetAllData()
+                }
+            }
+        }
+    }
+    
+    public func startTrackingByAgent(sharedSecertId: String, fleetId: String, userId: String){
+        NetworkingHelper.sharedInstance.getLocationRelatedToAgent(sharedSecert: sharedSecertId, fleetId: fleetId, userId: userId) { (isSucceeded, response) in
+            DispatchQueue.main.async {
+                print(response)
+                if isSucceeded == true{
+                    if let data = response["data"] as? [String:Any]{
+                        self.agentDetailModel = AgentDetailModel(json: data)
+                    }
+                }else{
+                    self.model.resetAllData()
+                }
+            }
+        }
+    }
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         

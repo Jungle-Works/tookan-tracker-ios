@@ -71,6 +71,9 @@
 		26F5BDC21FC82CC8000D2715 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26F5BDC11FC82CC2000D2715 /* Assets.xcassets */; };
 		26F5BDC41FC82CDC000D2715 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26F5BDBF1FC82CC2000D2715 /* Main.storyboard */; };
 		26F5BDC91FC82F14000D2715 /* TookanTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F5BDC81FC82F14000D2715 /* TookanTracker.swift */; };
+		5E41ECD023D178C5007EA990 /* JobModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E41ECCF23D178C5007EA990 /* JobModel.swift */; };
+		5E41ECD423D17997007EA990 /* JobData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E41ECD323D17997007EA990 /* JobData.swift */; };
+		5E7F3CF523D090470062FCB9 /* AgentDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7F3CF423D090470062FCB9 /* AgentDetailModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +131,9 @@
 		26F5BDC81FC82F14000D2715 /* TookanTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TookanTracker.swift; sourceTree = "<group>"; };
 		26F5BDED1FC834BC000D2715 /* CocoaAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CocoaAsyncSocket.h; sourceTree = "<group>"; };
 		26F5BDF21FC836B4000D2715 /* SwiftyTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyTimer.h; sourceTree = "<group>"; };
+		5E41ECCF23D178C5007EA990 /* JobModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobModel.swift; sourceTree = "<group>"; };
+		5E41ECD323D17997007EA990 /* JobData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobData.swift; sourceTree = "<group>"; };
+		5E7F3CF423D090470062FCB9 /* AgentDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentDetailModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +291,9 @@
 			isa = PBXGroup;
 			children = (
 				26F5BDB81FC82BEB000D2715 /* TrackerModel.swift */,
+				5E7F3CF423D090470062FCB9 /* AgentDetailModel.swift */,
+				5E41ECCF23D178C5007EA990 /* JobModel.swift */,
+				5E41ECD323D17997007EA990 /* JobData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -427,10 +436,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				26F5BD911FC8247E000D2715 /* ServerCallAPI.swift in Sources */,
+				5E41ECD023D178C5007EA990 /* JobModel.swift in Sources */,
 				263213221FC8648400E0C2AA /* GCDAsyncSocket.m in Sources */,
 				26F5BD8C1FC82471000D2715 /* ExtensionClass.swift in Sources */,
 				2632132A1FC8649C00E0C2AA /* CocoaMQTTMessage.swift in Sources */,
 				263213241FC8648B00E0C2AA /* SwiftyTimer.swift in Sources */,
+				5E7F3CF523D090470062FCB9 /* AgentDetailModel.swift in Sources */,
 				26F5BD8D1FC82474000D2715 /* IJReachability.swift in Sources */,
 				263213291FC8649900E0C2AA /* CocoaMQTTFrame.swift in Sources */,
 				26F5BDC91FC82F14000D2715 /* TookanTracker.swift in Sources */,
@@ -442,6 +453,7 @@
 				26F5BDB91FC82BEF000D2715 /* TrackerModel.swift in Sources */,
 				26F5BD8E1FC82477000D2715 /* LocationTrackerFile.swift in Sources */,
 				26F5BD901FC8247C000D2715 /* NetworkingHelper.swift in Sources */,
+				5E41ECD423D17997007EA990 /* JobData.swift in Sources */,
 				2632132B1FC864AB00E0C2AA /* MqttClass.swift in Sources */,
 				26F5BD8B1FC8246E000D2715 /* Constants.swift in Sources */,
 			);
