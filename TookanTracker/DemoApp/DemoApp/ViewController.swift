@@ -105,6 +105,7 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signInAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
+        TookanTracker.shared.createSession(userID: "27278", apiKey: apiKey, isUINeeded: false, navigationController: self.navigationController!)
         TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: "\(self.passwordTextField.text ?? "")", userId: "27278")
 //        var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
 //        param["job_id"] = "436463"
@@ -146,7 +147,8 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signupAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-        TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "27278")
+        TookanTracker.shared.createSession(userID:"27278", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
+        TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "27278")//"68451")//"27278")
 //        var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
 //        param["fleet_id"] = "33857" //"\(self.passwordTextField.text ?? "")"
 //        param["user_id"] = "27278"

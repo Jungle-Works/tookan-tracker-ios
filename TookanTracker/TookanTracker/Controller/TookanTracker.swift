@@ -24,7 +24,8 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     public var delegate:TookanTrackerDelegate!
     let model = TrackerModel()
     var agentDetailModel = AgentDetailModel(json: [:])
-    var jobData = JobModel(json: [:])
+    var jobModel = JobModel(json: [:])
+    var jobData = JobData(json: [:])
     var locationManager:CLLocationManager!
     var uiNeeded = false
     public func createSession(userID:String, apiKey: String,isUINeeded:Bool, navigationController:UINavigationController) {
@@ -46,7 +47,21 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                 print(response)
                 if isSucceeded == true{
                     if let data = response["data"] as? [String:Any]{
-                        self.jobData = JobModel(json: data)
+                        self.jobModel = JobModel(json: data)
+                        if let jobdata = data["jobs_data"] as? [String:Any]{
+                            self.jobData = JobData(json: jobdata)
+                        }
+                    }
+                    self.registerForGoogle()
+                    if self.uiNeeded {
+                        self.loc.registerAllRequiredInitilazers()
+                        self.initHome()
+                    } else {
+                        self.loc.topic = "\(globalAPIKey)\(globalUserId)"
+                        UserDefaults.standard.set(true, forKey: USER_DEFAULT.isLocationTrackingRunning)
+                        UserDefaults.standard.set(true, forKey: USER_DEFAULT.subscribeLocation)
+                        self.loc.registerAllRequiredInitilazers()
+                        self.initHome()
                     }
                 } else {
                     self.model.resetAllData()
@@ -58,13 +73,25 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     public func startTrackingByAgent(sharedSecertId: String, fleetId: String, userId: String){
         NetworkingHelper.sharedInstance.getLocationRelatedToAgent(sharedSecert: sharedSecertId, fleetId: fleetId, userId: userId) { (isSucceeded, response) in
             DispatchQueue.main.async {
-                print(response)
                 if isSucceeded == true{
-                    if let data = response["data"] as? [String:Any]{
+                      var sessionID = ""
+                     if let data = response["data"] as? [String:Any]{
                         self.agentDetailModel = AgentDetailModel(json: data)
+                        sessionID = "\(data["session_id"] ?? "")"
+                        self.delegate.getSessionId?(sessionId: sessionID)
+                        UserDefaults.standard.set(sessionID, forKey: USER_DEFAULT.sessionId)
                     }
-                }else{
-                    self.model.resetAllData()
+                    self.registerForGoogle()
+                    if self.uiNeeded {
+                        self.loc.registerAllRequiredInitilazers()
+                        self.initHome()
+                    } else {
+                        self.loc.topic = "\(globalAPIKey)\(globalUserId)"
+                        UserDefaults.standard.set(true, forKey: USER_DEFAULT.isLocationTrackingRunning)
+                        UserDefaults.standard.set(true, forKey: USER_DEFAULT.subscribeLocation)
+                        self.loc.registerAllRequiredInitilazers()
+                        self.initHome()
+                    }
                 }
             }
         }
@@ -114,7 +141,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     func initHome() {
         var home : HomeController!
         let storyboard = UIStoryboard(name: STORYBOARD_NAME.main, bundle: frameworkBundle)
-        home = storyboard.instantiateViewController(withIdentifier: STORYBOARD_ID.home) as! HomeController
+        home = storyboard.instantiateViewController(withIdentifier: STORYBOARD_ID.home) as? HomeController
         home.trackingDelegate = self
         self.merchantNavigationController?.pushViewController(home, animated: true)
     }

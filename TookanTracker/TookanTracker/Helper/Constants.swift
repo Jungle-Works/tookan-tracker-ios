@@ -13,7 +13,7 @@ class Constants: NSObject {
 
 let SERVER_PORT = 2  // 1 dev, 2 test, 3 Live
 let SERVER_KEY = 1 // 1 Test, 2 Live
-let APIKeyForGoogleMaps = "AIzaSyDqZn_rsqd_ZMQUITSKB5FGerbn6DwtdLg"//"AIzaSyDX32ar9JhpTYR1W3vGAAjzQTGeOx7MWm4"//"AIzaSyBFXsZ_biHbFbNkY05VRZ59YnhS6FWSYyg"
+let APIKeyForGoogleMaps = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"//"AIzaSyDqZn_rsqd_ZMQUITSKB5FGerbn6DwtdLg"//"AIzaSyDX32ar9JhpTYR1W3vGAAjzQTGeOx7MWm4"//"AIzaSyBFXsZ_biHbFbNkY05VRZ59YnhS6FWSYyg"
 var globalAPIKey = ""
 var globalUserId = ""
 let frameworkBundle = Bundle(identifier: "com.click-labs.TookanTracker")

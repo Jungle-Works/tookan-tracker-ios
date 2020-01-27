@@ -176,7 +176,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         let alertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: UIAlertControllerStyle.actionSheet)
         let confirmAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive) { (confirmed) -> Void in
             self.stopTrackingButton.isHidden = true
-            self.stopTracking(pop: pop)
+            self.dismissVC()
+//            self.stopTracking(pop: pop)
         }
         
         let cancelAction = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: {(UIAlertAction) in

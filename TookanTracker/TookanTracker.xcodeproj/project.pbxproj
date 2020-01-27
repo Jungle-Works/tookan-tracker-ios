@@ -74,6 +74,7 @@
 		5E41ECD023D178C5007EA990 /* JobModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E41ECCF23D178C5007EA990 /* JobModel.swift */; };
 		5E41ECD423D17997007EA990 /* JobData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E41ECD323D17997007EA990 /* JobData.swift */; };
 		5E7F3CF523D090470062FCB9 /* AgentDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7F3CF423D090470062FCB9 /* AgentDetailModel.swift */; };
+		5EAF3CB723D7478700AE9AFB /* Jobs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAF3CB623D7478700AE9AFB /* Jobs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,6 +135,7 @@
 		5E41ECCF23D178C5007EA990 /* JobModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobModel.swift; sourceTree = "<group>"; };
 		5E41ECD323D17997007EA990 /* JobData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobData.swift; sourceTree = "<group>"; };
 		5E7F3CF423D090470062FCB9 /* AgentDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentDetailModel.swift; sourceTree = "<group>"; };
+		5EAF3CB623D7478700AE9AFB /* Jobs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jobs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -294,6 +296,7 @@
 				5E7F3CF423D090470062FCB9 /* AgentDetailModel.swift */,
 				5E41ECCF23D178C5007EA990 /* JobModel.swift */,
 				5E41ECD323D17997007EA990 /* JobData.swift */,
+				5EAF3CB623D7478700AE9AFB /* Jobs.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 				263213221FC8648400E0C2AA /* GCDAsyncSocket.m in Sources */,
 				26F5BD8C1FC82471000D2715 /* ExtensionClass.swift in Sources */,
 				2632132A1FC8649C00E0C2AA /* CocoaMQTTMessage.swift in Sources */,
+				5EAF3CB723D7478700AE9AFB /* Jobs.swift in Sources */,
 				263213241FC8648B00E0C2AA /* SwiftyTimer.swift in Sources */,
 				5E7F3CF523D090470062FCB9 /* AgentDetailModel.swift in Sources */,
 				26F5BD8D1FC82474000D2715 /* IJReachability.swift in Sources */,
