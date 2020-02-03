@@ -13,6 +13,10 @@ class JobData : NSObject {
     var jobs = [Jobs]()
     var routedJobs = [RoutedJobs]()
     
+    override init() {
+        
+    }
+    
     init(json:[String:Any]) {
     
     super.init()

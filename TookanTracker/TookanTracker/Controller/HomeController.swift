@@ -30,7 +30,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     var moving = true
     var trackingDelegate:TrackingDelegate!
     var isTrackingEnabled = true
-
+    var myCurrentLocation:CLLocation!
+    var jobModel: JobModel?
+    
 //    struct SHOW_HIDE {
 //        static let showBottomView = 1
 //        static let hideBottomView = 2
@@ -93,8 +95,78 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         self.setUserCurrentJob()
         self.setTrackingButton()
         self.sliderShareAction()
+        self.drawPathFromCurrentToDestination()
     }
     
+    func  getLatitudeLongitudeOf() -> CLLocationCoordinate2D?{
+         var coordinate: CLLocationCoordinate2D!
+        let latitudeString = jobModel?.jobLat as? String ?? ""
+        let longitudeString = jobModel?.joblng as? String ?? ""
+        coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
+         return coordinate
+     }
+    func drawPath(_ encodedPathString: String, originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D, minOrigin:CGFloat) -> Void{
+        DispatchQueue.main.async {
+            guard UIApplication.shared.applicationState == UIApplication.State.active else {
+                return
+            }
+            self.googleMapView.clear()
+            CATransaction.begin()
+            CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
+            let path = GMSPath(fromEncodedPath: encodedPathString)
+            let line = GMSPolyline(path: path)
+            line.strokeWidth = 4.0
+            line.strokeColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
+            line.isTappable = true
+            line.map = self.googleMapView
+            self.setMarker(originCoordinate, destinationCoordinate: destinationCoordinate, minOrigin: minOrigin)
+            // change the camera, set the zoom, whatever.  Just make sure to call the animate* method.
+            self.googleMapView.animate(toViewingAngle: 45)
+            CATransaction.commit()
+        }
+    }
+      func drawPathFromCurrentToDestination() {
+          let originCoordinate = LocationTrackerFile.sharedInstance().getLatestLocationForForegroundMode()
+          let destinationCoordinate = self.getLatitudeLongitudeOf()
+          
+          if myCurrentLocation == nil {
+              self.myCurrentLocation = LocationTrackerFile.sharedInstance().getLatestLocationForForegroundMode()
+          } else {
+              guard Double((originCoordinate?.distance(from: self.myCurrentLocation))!) > 200.0 else {
+                  return
+              }
+          }
+          self.myCurrentLocation = originCoordinate
+        let corr = CLLocationCoordinate2D.init(latitude: 30.7046, longitude: 76.7179)
+        let desCoor = CLLocationCoordinate2D.init(latitude: 28.7041, longitude: 77.1025)
+        NetworkingHelper.sharedInstance.getPath(coordinate: corr, destinationCoordinate: desCoor, completionHander: { (points) in
+            if points.count > 0 {
+            self.drawPath(points, originCoordinate:corr, destinationCoordinate:desCoor, minOrigin:0.5 + 20)
+            } else {
+                 self.setMarker((originCoordinate?.coordinate)!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20)
+            }
+        }, mapview: self.googleMapView)
+      }
+    
+    
+    
+      func setMarker(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat){
+         googleMapView.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+         let destinationLocationMarker = GMSMarker(position: destinationCoordinate)
+//         destinationLocationMarker.icon = #imageLiteral(resourceName: "selectedIcon").withRenderingMode(.alwaysTemplate)//self.jobModel.getSelectedMarker(jobStatus: Singleton.sharedInstance.selectedTaskDetails.jobStatus)
+         destinationLocationMarker.map = googleMapView
+         
+         let northEastCoordinate = CLLocationCoordinate2D(latitude: max(originCoordinate.latitude, destinationCoordinate.latitude), longitude: max(originCoordinate.longitude, destinationCoordinate.longitude))
+         let southWestCoordinate = CLLocationCoordinate2D(latitude: min(originCoordinate.latitude, destinationCoordinate.latitude), longitude: min(originCoordinate.longitude, destinationCoordinate.longitude))
+         
+         _ = GMSCameraPosition(target: CLLocationCoordinate2D(latitude: (northEastCoordinate.latitude + southWestCoordinate.latitude)/2, longitude: (northEastCoordinate.longitude + southWestCoordinate.longitude)/2), zoom: 12, bearing: 0, viewingAngle: 0)
+         
+         //        googleMapView.animateToCameraPosition(cameraPosition)
+         
+         let bounds = GMSCoordinateBounds(coordinate: originCoordinate, coordinate: destinationCoordinate)
+         let update = GMSCameraUpdate.fit(bounds, with: UIEdgeInsets.init(top: 0, left: 20, bottom: minOrigin, right: 20))
+         googleMapView.moveCamera(update)
+     }
     func setTrackingButton() {
         self.stopTrackingButton.layer.cornerRadius = 5.0
         self.setTrackingTitle()
@@ -103,14 +175,14 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     }
     
     func setTrackingTitle() {
-        if let _ = UserDefaults.standard.value(forKey: USER_DEFAULT.sessionId) as? String {
+//        if let _ = UserDefaults.standard.value(forKey: USER_DEFAULT.sessionId) as? String {
             self.stopTrackingButton.setTitle("Stop Sharing Location", for: .normal)
             self.isTrackingEnabled = true
-        } else {
-            self.stopTrackingButton.setTitle("Start Sharing Location", for: .normal)
-            self.userStatus = USER_JOB_STATUS.free
-            self.isTrackingEnabled = false
-        }
+//        } else {
+//            self.stopTrackingButton.setTitle("Start Sharing Location", for: .normal)
+//            self.userStatus = USER_JOB_STATUS.free
+//            self.isTrackingEnabled = false
+//        }
         
     }
     
@@ -151,7 +223,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     
     @IBAction func stopTrackingAction(_ sender: Any) {
         
-        self.stopTrackingConformation(pop: false)
+        self.stopTrackingConformation(pop: true)
     }
     
     

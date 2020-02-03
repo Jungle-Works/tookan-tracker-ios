@@ -105,82 +105,20 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signInAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-        TookanTracker.shared.createSession(userID: "27278", apiKey: apiKey, isUINeeded: false, navigationController: self.navigationController!)
-        TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: "\(self.passwordTextField.text ?? "")", userId: "27278")
-//        var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
-//        param["job_id"] = "436463"
-//        param["user_id"] = "27278"
-//        param["request_type"] = "1"
-//        param["fleet_tracking"] = "1"
-//        print(param)
-//        Networking.sharedInstance.commonServerCall(apiName: "create_sdk_tracking_session", params: param as [String : AnyObject]?, httpMethod: HTTP_METHOD.POST) { (isSucceeded, response) in
-//            DispatchQueue.main.async {
-//                print(response)
-//                if isSucceeded == true {
-//                    if let status = response["status"] as? Int {
-//                        switch status {
-//                        case STATUS_CODES.SHOW_DATA:
-//                            UserDefaults.standard.set(false, forKey: USER_DEFAULT.isSessionExpire)
-//                            UserDefaults.standard.set("\(self.emailTextField.text ?? "")", forKey: USER_DEFAULT.userId)
-//                            TookanTracker.shared.delegate = self
-//                            TookanTracker.shared.createSession(userID:"\(self.emailTextField.text ?? "")", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
-//                            break
-//                        case STATUS_CODES.INVALID_ACCESS_TOKEN:
-//                            UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                            break
-//                        default:
-//                            UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                            break
-//                        }
-//                    }
-//                } else {
-//                    UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                    print(response["message"] as? String ?? "somthingWrong")
-//                }
-//            }
-//        }
-//
-//
+        TookanTracker.shared.createSession(userID: "68451", apiKey: apiKey, isUINeeded: false, navigationController: self.navigationController!)
+        TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: "\(self.passwordTextField.text ?? "")", userId: "68451")
+        //        "job_id" : 446113,446358,"user_id" : 68451,
+
         
     }
     
     
     @IBAction func signupAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-        TookanTracker.shared.createSession(userID:"27278", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
-        TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "27278")//"68451")//"27278")
-//        var param:[String:Any] = ["shared_secret": "tookan-sdk-345#!@"]
-//        param["fleet_id"] = "33857" //"\(self.passwordTextField.text ?? "")"
-//        param["user_id"] = "27278"
-//        param["request_type"] = "1"
-//
-//        print(param)
-//        Networking.sharedInstance.commonServerCall(apiName: "sdk_track_agent", params: param as [String : AnyObject]?, httpMethod: HTTP_METHOD.POST) { (isSucceeded, response) in
-//                    DispatchQueue.main.async {
-//                        print(response)
-//                        if isSucceeded == true {
-//                            if let status = response["status"] as? Int {
-//                                switch status {
-//                                case STATUS_CODES.SHOW_DATA:
-//                                    UserDefaults.standard.set(false, forKey: USER_DEFAULT.isSessionExpire)
-//                                    UserDefaults.standard.set("\(self.emailTextField.text ?? "")", forKey: USER_DEFAULT.userId)
-//                                    TookanTracker.shared.delegate = self
-//                                    TookanTracker.shared.createSession(userID:"27278", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
-//                                    break
-//                                case STATUS_CODES.INVALID_ACCESS_TOKEN:
-//                                    UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                                    break
-//                                default:
-//                                    UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                                    break
-//                                }
-//                            }
-//                        } else {
-//                            UIAlertView(title: "", message: response["message"] as! String, delegate: nil, cancelButtonTitle: "OK").show()
-//                            print(response["message"] as? String ?? "somthingWrong")
-//                        }
-//                    }
-//                }
+        TookanTracker.shared.createSession(userID:"68451", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
+        TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "68451")//"68451")//"27278")
+//        "fleet_id" : 54700,"user_id" : 68451,
+
         
     }
     

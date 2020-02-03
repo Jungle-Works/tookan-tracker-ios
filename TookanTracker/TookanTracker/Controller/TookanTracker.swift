@@ -24,8 +24,8 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     public var delegate:TookanTrackerDelegate!
     let model = TrackerModel()
     var agentDetailModel = AgentDetailModel(json: [:])
-    var jobModel = JobModel(json: [:])
-    var jobData = JobData(json: [:])
+    var jobModel = JobModel()
+    var jobData = JobData()
     var locationManager:CLLocationManager!
     var uiNeeded = false
     public func createSession(userID:String, apiKey: String,isUINeeded:Bool, navigationController:UINavigationController) {
@@ -139,11 +139,12 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     }
     
     func initHome() {
-        var home : HomeController!
         let storyboard = UIStoryboard(name: STORYBOARD_NAME.main, bundle: frameworkBundle)
-        home = storyboard.instantiateViewController(withIdentifier: STORYBOARD_ID.home) as? HomeController
-        home.trackingDelegate = self
-        self.merchantNavigationController?.pushViewController(home, animated: true)
+        if let home  = storyboard.instantiateViewController(withIdentifier: STORYBOARD_ID.home) as? HomeController {
+            home.trackingDelegate = self
+            home.jobModel = self.jobModel
+            self.merchantNavigationController?.pushViewController(home, animated: true)
+        }
     }
     
     func startSharingLocation() {

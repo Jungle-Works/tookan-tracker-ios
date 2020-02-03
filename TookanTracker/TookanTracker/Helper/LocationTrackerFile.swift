@@ -13,6 +13,7 @@ import CoreLocation
 import UIKit
 import SystemConfiguration
 import MapKit
+import Darwin.C
 
 @objc public protocol LocationTrackerDelegate {
     @objc optional func currentLocationOfUser(_ location:CLLocation)
@@ -131,7 +132,14 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
         }
         return self.myLocation
     }
-    
+    func getLatestLocationForForegroundMode() -> CLLocation! {
+        if self.myLocation != nil && self.myLocation.coordinate.latitude > 0.0 {
+            return self.myLocation
+        }  else {
+            return nil
+        }
+     }
+
     open func initMqtt() {
         MqttClass.sharedInstance.mqttSetting()
         MqttClass.sharedInstance.connectToServer()

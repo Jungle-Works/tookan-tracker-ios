@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreLocation
+
 
 class Constants: NSObject {
 }
@@ -29,6 +31,36 @@ struct SERVER {
 }
 
 //let APIKeyForGoogleMaps = "AIzaSyDqZn_rsqd_ZMQUITSKB5FGerbn6DwtdLg"//"AIzaSyDX32ar9JhpTYR1W3vGAAjzQTGeOx7MWm4"//"AIzaSyBFXsZ_biHbFbNkY05VRZ59YnhS6FWSYyg"
+struct GoogleMapsUtils{
+    
+    static let iOSGoogleMapKey = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"
+    
+    static let GoogleApiUrl = "https://maps.googleapis.com"
+    
+    static let keyForWhiteLabel = "enter_your_key" // Please use your key
+    
+    static func getDirectionUrl(_ from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> String {
+        
+        let URLPortionToSign = "https://maps.googleapis.com/maps/api/directions/json?origin=\(from.latitude),\(from.longitude)&destination=\(to.latitude),\(to.longitude)&sensor=false&mode=driving&key=\(iOSGoogleMapKey)"
+        return URLPortionToSign
+//        let map = Singleton.sharedInstance.maps
+//        if map.planType == MAP_ACCOUNT_TYPE.premium {
+//            let urlSigner = GMUrlSigner()
+//            let URLPortionToSign = "/maps/api/directions/json?origin=\(from.latitude),\(from.longitude)&destination=\(to.latitude),\(to.longitude)&sensor=false&mode=driving&client=\(map.clientId)"
+//            print(map.signature)
+//            if let signature = urlSigner.signUrl(URLPortionToSign, withThisKey: map.signature) {
+//                let fullSignedURL = GoogleApiUrl + "\(URLPortionToSign)&signature=\(signature)"
+//                return fullSignedURL
+//            } else {
+//                return "http://maps.googleapis.com/maps/api/directions/json?origin=\(from.latitude),\(from.longitude)&destination=\(to.latitude),\(to.longitude)&sensor=false&mode=driving"
+//            }
+//        } else {
+//            return "https://maps.googleapis.com/maps/api/directions/json?origin=\(from.latitude),\(from.longitude)&destination=\(to.latitude),\(to.longitude)&sensor=false&mode=driving"
+//        }
+    }
+    
+    
+}
 
 struct USER_JOB_STATUS {
     static let free = 0
@@ -49,6 +81,7 @@ struct USER_DEFAULT {
     static let sessionURL = "sessionUrl"
     static let apiKey = "apiKey"
     static let userId = "userId"
+    static let lastAccurateUserLocation = "lastUserLocation"
 }
 
 struct OBSERVER {
@@ -110,11 +143,5 @@ struct STORYBOARD_NAME {
 
 struct STORYBOARD_ID {
     static let home = "HomeController"
-    //    static let listVC = "ListTableViewController"
-    //    static let addLocation = "addLocation"
-    //    static let addCardWeb = "addCardWeb"
-    //    static let payment = "payment"
-    //    static let orderDetail = "OrderDetail"
-    //    static let orderHistoryVC = "OrderHistoryVC"
     
 }
