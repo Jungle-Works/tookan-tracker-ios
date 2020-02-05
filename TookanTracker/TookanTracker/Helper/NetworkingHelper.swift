@@ -479,6 +479,7 @@ class NetworkingHelper: NSObject {
 //        destinationLocationMarker.icon = #imageLiteral(resourceName: "selectedIcon").withRenderingMode(.alwaysTemplate)//self.jobModel.getSelectedMarker(jobStatus: Singleton.sharedInstance.selectedTaskDetails.jobStatus)
         destinationLocationMarker.map = googleMapView
         
+        
         let northEastCoordinate = CLLocationCoordinate2D(latitude: max(originCoordinate.latitude, destinationCoordinate.latitude), longitude: max(originCoordinate.longitude, destinationCoordinate.longitude))
         let southWestCoordinate = CLLocationCoordinate2D(latitude: min(originCoordinate.latitude, destinationCoordinate.latitude), longitude: min(originCoordinate.longitude, destinationCoordinate.longitude))
         
@@ -512,7 +513,7 @@ class NetworkingHelper: NSObject {
         }
     }
     
-    func getPath(coordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, completionHander:@escaping (String) -> Void, mapview: GMSMapView) {
+    func getPath(coordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, completionHander:@escaping (String,[String : AnyObject]) -> Void, mapview: GMSMapView) {
         NetworkingHelper.sharedInstance.fetchPathPoints((coordinate), to: destinationCoordinate ) { (optionalRoute) in
 
 
@@ -521,12 +522,13 @@ class NetworkingHelper: NSObject {
                 if routes.count > 0 {
                     if let shortestRoute = routes[0] as? [String: AnyObject],
                         let legs = shortestRoute["legs"] as? Array<[String: AnyObject]>,
+                        let durationDict = legs[0]["duration"] as? [String: AnyObject],
                         let distanceDict = legs[0]["distance"] as? [String: AnyObject],
                         let distance = distanceDict["value"] as? NSNumber,
                         let polyline = shortestRoute["overview_polyline"] as? [String: String],
                         let points = polyline["points"]
                         , distance.doubleValue >= 0 {
-                        completionHander(points)
+                        completionHander(points,durationDict)
                       //  self.drawPath(points, originCoordinate:(originCoordinate?.coordinate)!, destinationCoordinate:destinationCoordinate!, minOrigin:0.5 + 20)
                     }
                 } else{

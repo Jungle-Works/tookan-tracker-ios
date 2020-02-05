@@ -35,6 +35,8 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     
     open var delegate:LocationTrackerDelegate!
     var trackingDelegate:TrackingDelegate!
+    var shareModel: LocationShareModel?
+     var sendFirstTimeLocation = true
     //fileprivate var host = "dev.tracking.tookan.io"////"test.mosquitto.org"//"test.tookanapp.com"//
     //fileprivate var portNumber:UInt16 = 1883
     fileprivate var slotTime = 5.0
@@ -56,17 +58,13 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     fileprivate var locationManager:CLLocationManager!
     fileprivate var speed:Float = 0
     fileprivate var bgTask: BackgroundTaskManager?
-//    var getCoordinates : ((_ coordinates: CLLocation) -> Void)?
+
     
     let SDKVersion = "1.0"
     
     override init() {
         super.init()
-//        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.applicationEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.appEnterInTerminateState), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.enterInForegroundFromBackground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-////        NotificationCenter.default.addObserver(self, selector: #selector(LocationTrackerFile.becomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-//        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
+        self.shareModel = LocationShareModel.sharedModel()
         UIDevice.current.isBatteryMonitoringEnabled = true
     }
     
@@ -245,25 +243,46 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     }
     
     open func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.bgTask = BackgroundTaskManager.sharedBackgroundTaskManager()
-        _ = self.bgTask!.beginNewBackgroundTask()
+        if (self.shareModel!.timer != nil) {
+            return
+        }
+
+        self.shareModel!.bgTask = BackgroundTaskManager.sharedBackgroundTaskManager()
+        _ = self.shareModel!.bgTask!.beginNewBackgroundTask()
         if locations.last != nil {
-            
             self.myLocation = locations.last! as CLLocation
-            print("didUpdateLocations  \(self.myLocation.coordinate.latitude)")
+            self.sendLocationThroughUDP(socketLocation: self.myLocation)
             self.myLocationAccuracy = self.myLocation.horizontalAccuracy
-            if(firstTime == true) {
-                firstTime = false
-                self.sendFirstLocation()
-                delegate?.currentLocationOfUser?(locations.last!)
+            if(self.sendFirstTimeLocation == true) {
+                var locationDict:[String:Any] = ["latitude" : "\(self.myLocation.coordinate.latitude)"]
+                locationDict["longitude"] = "\(self.myLocation.coordinate.longitude)"
+                print(locationDict)
+                //let locationDict = ["latitude" : "\(self.myLocation.coordinate.latitude)", "longitude" : "\(self.myLocation.coordinate.longitude)"]
+                UserDefaults.standard.set(locationDict, forKey: USER_DEFAULT.lastAccurateUserLocation)
+                self.sendFirstTimeLocation = false
             }
-            self.trackingDelegate?.getCoordinates?(locations.last!)
-            if(UserDefaults.standard.bool(forKey: USER_DEFAULT.isLocationTrackingRunning) == true) {
-                self.applyFilterOnGetLocation()
-            }
+            
         }
     }
-    
+   func sendLocationThroughUDP(socketLocation:CLLocation){
+        
+        if(UserDefaults.standard.value(forKey: USER_DEFAULT.apiKey) != nil) {
+            let timestamp = socketLocation.timestamp.timeIntervalSince1970 * 1000
+            var myLocationToSend:[String:Any] = ["lat" : socketLocation.coordinate.latitude as Double]
+            myLocationToSend["lng"] = socketLocation.coordinate.longitude as Double
+            myLocationToSend["tm_stmp"] = timestamp
+            myLocationToSend["bat_lvl"] = UIDevice.current.batteryLevel * 100
+            myLocationToSend["acc"] = socketLocation.horizontalAccuracy
+            //myLocationToSend = ["lat" : socketLocation.coordinate.latitude as Double,"lng" :socketLocation.coordinate.longitude as Double, "tm_stmp" : timestamp, "bat_lvl" : UIDevice.current.batteryLevel * 100,"acc":socketLocation.horizontalAccuracy]\
+            var udpData:[String:Any] = ["flag" : 0]
+            udpData["data"] = myLocationToSend
+            //let udpData = ["flag":0, "data":myLocationToSend, "fleet_id":Singleton.sharedInstance.fleetDetails.fleetId!, "device_type":DEVICE_TYPE] as [String : Any]
+            
+           let client:UDPClient = UDPClient(addr: IP_ADDRESS, port: PORT)
+            _ = client.send(str: udpData.jsonString)
+            _ = client.close()
+        }
+    }
     
     
     fileprivate func applyFilterOnGetLocation() {

@@ -12,10 +12,11 @@ import CoreLocation
 
 class Constants: NSObject {
 }
-
+let IP_ADDRESS = "test.tookanapp.com"
+let PORT = 8015
 let SERVER_PORT = 2  // 1 dev, 2 test, 3 Live
 let SERVER_KEY = 1 // 1 Test, 2 Live
-let APIKeyForGoogleMaps = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"//"AIzaSyDqZn_rsqd_ZMQUITSKB5FGerbn6DwtdLg"//"AIzaSyDX32ar9JhpTYR1W3vGAAjzQTGeOx7MWm4"//"AIzaSyBFXsZ_biHbFbNkY05VRZ59YnhS6FWSYyg"
+let APIKeyForGoogleMaps = TookanTracker.shared.googleMapKey
 var globalAPIKey = ""
 var globalUserId = ""
 let frameworkBundle = Bundle(identifier: "com.click-labs.TookanTracker")
@@ -33,7 +34,7 @@ struct SERVER {
 //let APIKeyForGoogleMaps = "AIzaSyDqZn_rsqd_ZMQUITSKB5FGerbn6DwtdLg"//"AIzaSyDX32ar9JhpTYR1W3vGAAjzQTGeOx7MWm4"//"AIzaSyBFXsZ_biHbFbNkY05VRZ59YnhS6FWSYyg"
 struct GoogleMapsUtils{
     
-    static let iOSGoogleMapKey = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"
+    static let iOSGoogleMapKey = APIKeyForGoogleMaps
     
     static let GoogleApiUrl = "https://maps.googleapis.com"
     

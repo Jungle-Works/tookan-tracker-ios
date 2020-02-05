@@ -13,6 +13,13 @@ import GooglePlaces
 
 class HomeController: UIViewController, LocationTrackerDelegate {
     
+    @IBOutlet var viewETASelection: UIView!
+    @IBOutlet var btnCloseETA: UIButton!
+    @IBOutlet var btnForMap: UIButton!
+    @IBOutlet var btnForEta: UIButton!
+    @IBOutlet var selectionView: UIView!
+    @IBOutlet var lblETAValue: UILabel!
+    @IBOutlet var viewETA: UIView!
     @IBOutlet weak var googleMapView: GMSMapView!
     @IBOutlet var currentLocation: UIButton!
     @IBOutlet var logout: UIButton!
@@ -32,7 +39,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     var isTrackingEnabled = true
     var myCurrentLocation:CLLocation!
     var jobModel: JobModel?
-    
+    var jobData: Jobs?
+    var getETA: ((String)->Void)?
+    var etaDict: String = ""
 //    struct SHOW_HIDE {
 //        static let showBottomView = 1
 //        static let hideBottomView = 2
@@ -49,7 +58,13 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         /*----------------- Location Tracker --------------*/
+        self.viewETA.isHidden = true
+        self.selectionView.isHidden = false
+
+        
         self.loc.delegate = self
+        
+        
 //        self.loc.setLocationUpdate()
         self.loc.registerAllRequiredInitilazers()
 //        self.loc.initMqtt()
@@ -95,7 +110,11 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         self.setUserCurrentJob()
         self.setTrackingButton()
         self.sliderShareAction()
+        if self.jobModel?.jobLat != ""{
         self.drawPathFromCurrentToDestination()
+        }else{
+            print("aaaa")
+        }
     }
     
     func  getLatitudeLongitudeOf() -> CLLocationCoordinate2D?{
@@ -105,7 +124,14 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
          return coordinate
      }
-    func drawPath(_ encodedPathString: String, originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D, minOrigin:CGFloat) -> Void{
+    func  getLatitudeLongitudeOfDest() -> CLLocationCoordinate2D?{
+         var coordinate: CLLocationCoordinate2D!
+        let latitudeString = jobData?.jobLat as? String ?? ""
+        let longitudeString = jobData?.jobLng as? String ?? ""
+        coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
+         return coordinate
+     }
+    func drawPath(_ encodedPathString: String, originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D, minOrigin:CGFloat, durationDict:[String : AnyObject]) -> Void{
         DispatchQueue.main.async {
             guard UIApplication.shared.applicationState == UIApplication.State.active else {
                 return
@@ -119,43 +145,43 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             line.strokeColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
             line.isTappable = true
             line.map = self.googleMapView
-            self.setMarker(originCoordinate, destinationCoordinate: destinationCoordinate, minOrigin: minOrigin)
+            self.setMarker(originCoordinate, destinationCoordinate: destinationCoordinate, minOrigin: minOrigin,durationDict:durationDict)
             // change the camera, set the zoom, whatever.  Just make sure to call the animate* method.
             self.googleMapView.animate(toViewingAngle: 45)
+            self.etaDict = "\(durationDict["text"] as? String ?? "")"
+            if let eta = self.getETA {
+                eta(self.etaDict)
+            }
             CATransaction.commit()
         }
     }
       func drawPathFromCurrentToDestination() {
-          let originCoordinate = LocationTrackerFile.sharedInstance().getLatestLocationForForegroundMode()
-          let destinationCoordinate = self.getLatitudeLongitudeOf()
+          let originCoordinate = self.getLatitudeLongitudeOf()//LocationTrackerFile.sharedInstance().getLatestLocationForForegroundMode()
+          let destinationCoordinate = self.getLatitudeLongitudeOfDest()
           
-          if myCurrentLocation == nil {
-              self.myCurrentLocation = LocationTrackerFile.sharedInstance().getLatestLocationForForegroundMode()
-          } else {
-              guard Double((originCoordinate?.distance(from: self.myCurrentLocation))!) > 200.0 else {
-                  return
-              }
-          }
-          self.myCurrentLocation = originCoordinate
-        let corr = CLLocationCoordinate2D.init(latitude: 30.7046, longitude: 76.7179)
-        let desCoor = CLLocationCoordinate2D.init(latitude: 28.7041, longitude: 77.1025)
-        NetworkingHelper.sharedInstance.getPath(coordinate: corr, destinationCoordinate: desCoor, completionHander: { (points) in
+//          if myCurrentLocation == nil {
+//              self.myCurrentLocation = LocationTrackerFile.sharedInstance().getLatestLocationForForegroundMode()
+//          }
+//          self.myCurrentLocation = originCoordinate ?? CLLocationCoordinate2D()
+
+        NetworkingHelper.sharedInstance.getPath(coordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
             if points.count > 0 {
-            self.drawPath(points, originCoordinate:corr, destinationCoordinate:desCoor, minOrigin:0.5 + 20)
+                self.drawPath(points, originCoordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate:destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20, durationDict: durationDict)
             } else {
-                 self.setMarker((originCoordinate?.coordinate)!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20)
+                self.setMarker(originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20,durationDict:durationDict)
             }
         }, mapview: self.googleMapView)
       }
     
     
-    
-      func setMarker(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat){
+    func setMarker(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat,durationDict: [String:AnyObject]){
          googleMapView.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
          let destinationLocationMarker = GMSMarker(position: destinationCoordinate)
 //         destinationLocationMarker.icon = #imageLiteral(resourceName: "selectedIcon").withRenderingMode(.alwaysTemplate)//self.jobModel.getSelectedMarker(jobStatus: Singleton.sharedInstance.selectedTaskDetails.jobStatus)
          destinationLocationMarker.map = googleMapView
-         
+        destinationLocationMarker.title = durationDict["text"] as? String ?? ""
+        destinationLocationMarker.isFlat = true
+        self.googleMapView.selectedMarker = destinationLocationMarker
          let northEastCoordinate = CLLocationCoordinate2D(latitude: max(originCoordinate.latitude, destinationCoordinate.latitude), longitude: max(originCoordinate.longitude, destinationCoordinate.longitude))
          let southWestCoordinate = CLLocationCoordinate2D(latitude: min(originCoordinate.latitude, destinationCoordinate.latitude), longitude: min(originCoordinate.longitude, destinationCoordinate.longitude))
          
@@ -220,9 +246,21 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         
     }
     
+    @IBAction func btnForETa(_ sender: Any) {
+        self.viewETA.isHidden = false
+        self.selectionView.isHidden = true
+        self.lblETAValue.text = "ETA - \(etaDict)"
+
+    }
     
+    @IBAction func mapBtnAction(_ sender: Any) {
+        self.viewETA.isHidden = true
+        self.selectionView.isHidden = true
+        viewETASelection.isHidden = true
+    }
     @IBAction func stopTrackingAction(_ sender: Any) {
         
+
         self.stopTrackingConformation(pop: true)
     }
     
@@ -313,8 +351,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     }
     
     func dismissVC() {
-        self.navigationController?.popToRootViewController(animated: true)
         self.trackingDelegate.logout!()
+        self.navigationController?.popToRootViewController(animated: true)
         UserDefaults.standard.removeObject(forKey: USER_DEFAULT.userId)
         UserDefaults.standard.removeObject(forKey: USER_DEFAULT.apiKey)
         UserDefaults.standard.removeObject(forKey: USER_DEFAULT.isLocationTrackingRunning)
@@ -605,6 +643,10 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     ////        }))
     ////        self.present(alert, animated: true, completion: nil)
     //    }
+    @IBAction func tapCloseETA(_ sender: Any) {
+        self.viewETA.isHidden = true
+        self.selectionView.isHidden = false
+    }
     
     func alertPopupForTracking() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
@@ -736,6 +778,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         CATransaction.setValue(NSNumber(value: 2.0), forKey: kCATransactionAnimationDuration)
         marker.position = originCoordinate
         marker.icon = destinationMarker
+        marker.title = "eta"
+        marker.isFlat = true
         marker.map = googleMapView
         CATransaction.commit()
     }

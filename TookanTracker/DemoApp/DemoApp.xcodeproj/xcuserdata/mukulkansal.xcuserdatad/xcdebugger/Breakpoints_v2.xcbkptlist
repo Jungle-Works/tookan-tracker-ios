@@ -7,175 +7,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "46F0C877-642E-49BD-AA0D-0D6908CA0C24"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DemoApp/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "signupAction(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "46BF47A0-B5BD-4B1A-85CA-96EBE5CDF905"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DemoApp/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "signupAction(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E3855F82-4E26-427F-BB87-1971EF2649EA"
+            uuid = "1BB9406B-E710-48FB-8A1F-9A2AFAEFF460"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../TookanTracker/Controller/TookanTracker.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "startTrackingByAgent(sharedSecertId:fleetId:userId:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C32DB858-9EBF-4CC2-ABC8-F7759A0E547B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/TookanTracker.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "startTrackingByAgent(sharedSecertId:fleetId:userId:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6DD9D45B-F27D-44E2-B3EF-866D9B209639"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "13228FE7-5E21-4195-8DA7-EBEC0F18BF33"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
-            landmarkName = "drawPath(_:originCoordinate:destinationCoordinate:minOrigin:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "41E3DC57-3181-47BA-92AD-BAFC7B306919"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
-            landmarkName = "getPath(coordinate:destinationCoordinate:completionHander:mapview:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "38A6C8AB-1FF9-4512-AA42-99541FA458F4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "drawPathFromCurrentToDestination()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C0F93827-6282-47CF-9523-05A5F43451F7"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "516"
-            endingLineNumber = "516"
-            landmarkName = "getPath(coordinate:destinationCoordinate:completionHander:mapview:)"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "startTarckingByJob(sharedSecertId:jobId:userId:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "C0F93827-6282-47CF-9523-05A5F43451F7 - 693f6dccd41e3560"
+                  uuid = "1BB9406B-E710-48FB-8A1F-9A2AFAEFF460 - aa84af82cef6882e"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "TookanTracker.NetworkingHelper.getPath(coordinate: __C.CLLocationCoordinate2D, destinationCoordinate: __C.CLLocationCoordinate2D, completionHander: (Swift.String) -&gt; (), mapview: __C.GMSMapView) -&gt; ()"
+                  symbolName = "TookanTracker.TookanTracker.startTarckingByJob(sharedSecertId: Swift.String, jobId: Swift.String, userId: Swift.String) -&gt; ()"
                   moduleName = "TookanTracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Helper/NetworkingHelper.swift"
+                  urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Controller/TookanTracker.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "516"
-                  endingLineNumber = "516"
-                  offsetFromSymbolStart = "88">
+                  startingLineNumber = "48"
+                  endingLineNumber = "48"
+                  offsetFromSymbolStart = "212">
                </Location>
                <Location
-                  uuid = "C0F93827-6282-47CF-9523-05A5F43451F7 - 9a7e277fd4c1c839"
+                  uuid = "1BB9406B-E710-48FB-8A1F-9A2AFAEFF460 - a03e69c5addf6fd"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.NSDictionary&gt;) -&gt; () in TookanTracker.NetworkingHelper.getPath(coordinate: __C.CLLocationCoordinate2D, destinationCoordinate: __C.CLLocationCoordinate2D, completionHander: (Swift.String) -&gt; (), mapview: __C.GMSMapView) -&gt; ()"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Dictionary&lt;Swift.String, Any&gt;) -&gt; () in TookanTracker.TookanTracker.startTarckingByJob(sharedSecertId: Swift.String, jobId: Swift.String, userId: Swift.String) -&gt; ()"
                   moduleName = "TookanTracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Helper/NetworkingHelper.swift"
+                  urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Controller/TookanTracker.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "519"
-                  endingLineNumber = "519"
-                  offsetFromSymbolStart = "579">
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "196">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -183,20 +55,68 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8444592E-8FF7-46C6-9D73-DEE9DE7671B9"
+            uuid = "F0227A9F-C9C0-4CAD-BCBF-F389ED66ADDC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../TookanTracker/Controller/TookanTracker.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "initHome()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EA86F958-9A01-4F5F-8056-5EBBA3D92E46"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../TookanTracker/Controller/HomeController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "21E115A8-1CBF-40AE-BD83-FB0647809673"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../TookanTracker/Controller/HomeController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "532561D6-7A46-477E-B2CC-03AC045ABF55"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../TookanTracker/Controller/HomeController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
             landmarkName = "drawPathFromCurrentToDestination()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "8444592E-8FF7-46C6-9D73-DEE9DE7671B9 - fb309deee85292b9"
+                  uuid = "532561D6-7A46-477E-B2CC-03AC045ABF55 - fb309deee85292b9"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -206,24 +126,24 @@
                   urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Controller/HomeController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "1131">
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "192">
                </Location>
                <Location
-                  uuid = "8444592E-8FF7-46C6-9D73-DEE9DE7671B9 - a5b6a3c015826e0f"
+                  uuid = "532561D6-7A46-477E-B2CC-03AC045ABF55 - f8b83001b2093d74"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.String) -&gt; () in TookanTracker.HomeController.drawPathFromCurrentToDestination() -&gt; ()"
+                  symbolName = "closure #1 (Swift.String, Swift.Dictionary&lt;Swift.String, Swift.AnyObject&gt;) -&gt; () in TookanTracker.HomeController.drawPathFromCurrentToDestination() -&gt; ()"
                   moduleName = "TookanTracker"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Controller/HomeController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "397">
+                  startingLineNumber = "168"
+                  endingLineNumber = "168"
+                  offsetFromSymbolStart = "300">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -231,7 +151,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C7947A46-F271-4316-A263-CD651F544215"
+            uuid = "CEF9B89D-159F-4E1C-9019-80D3CD3BF673"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -240,70 +160,54 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "150"
             endingLineNumber = "150"
-            landmarkName = "fetchPathPoints(_:to:completion:)"
+            landmarkName = "getLocationRelatedToAgent(sharedSecert:fleetId:userId:receivedResponse:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "08881E66-FD64-4940-A51C-D7673B232214"
+            uuid = "8FF713D4-2F84-477C-AA26-CF913189CCA8"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "fetchPathPoints(_:to:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EE57EFF4-0221-4A13-A398-8A04DBAEAA9E"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
-            landmarkName = "fetchPathPoints(_:to:completion:)"
+            startingLineNumber = "517"
+            endingLineNumber = "517"
+            landmarkName = "drawPath(_:originCoordinate:destinationCoordinate:minOrigin:googleMapView:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "EE57EFF4-0221-4A13-A398-8A04DBAEAA9E - 6d11d3c34171fd73"
+                  uuid = "8FF713D4-2F84-477C-AA26-CF913189CCA8 - e1d868bb412639ec"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "TookanTracker.NetworkingHelper.fetchPathPoints(_: __C.CLLocationCoordinate2D, to: __C.CLLocationCoordinate2D, completion: (Swift.Optional&lt;__C.NSDictionary&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "TookanTracker.NetworkingHelper.getPath(coordinate: __C.CLLocationCoordinate2D, destinationCoordinate: __C.CLLocationCoordinate2D, completionHander: (Swift.String, Swift.Dictionary&lt;Swift.String, Swift.AnyObject&gt;) -&gt; (), mapview: __C.GMSMapView) -&gt; ()"
                   moduleName = "TookanTracker"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Helper/NetworkingHelper.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "160"
-                  endingLineNumber = "160"
-                  offsetFromSymbolStart = "682">
+                  startingLineNumber = "517"
+                  endingLineNumber = "517"
+                  offsetFromSymbolStart = "256">
                </Location>
                <Location
-                  uuid = "EE57EFF4-0221-4A13-A398-8A04DBAEAA9E - d00bae275a42370b"
+                  uuid = "8FF713D4-2F84-477C-AA26-CF913189CCA8 - debd1b0e4b306302"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in TookanTracker.NetworkingHelper.fetchPathPoints(_: __C.CLLocationCoordinate2D, to: __C.CLLocationCoordinate2D, completion: (Swift.Optional&lt;__C.NSDictionary&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "closure #1 (Swift.Optional&lt;__C.NSDictionary&gt;) -&gt; () in TookanTracker.NetworkingHelper.getPath(coordinate: __C.CLLocationCoordinate2D, destinationCoordinate: __C.CLLocationCoordinate2D, completionHander: (Swift.String, Swift.Dictionary&lt;Swift.String, Swift.AnyObject&gt;) -&gt; (), mapview: __C.GMSMapView) -&gt; ()"
                   moduleName = "TookanTracker"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Helper/NetworkingHelper.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "161"
-                  endingLineNumber = "161"
-                  offsetFromSymbolStart = "290">
+                  startingLineNumber = "520"
+                  endingLineNumber = "520"
+                  offsetFromSymbolStart = "516">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -311,95 +215,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C5BFCABE-AB40-4889-9B84-EABE8C62A191"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
-            landmarkName = "fetchPathPoints(_:to:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9571834D-E80D-449C-B440-3459909D62CC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "fetchPathPoints(_:to:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "07DEF357-8DCB-4C41-8353-3ACD112658AE"
+            uuid = "FFFE2245-7CEE-488F-A324-6CC56FF08030"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../TookanTracker/Controller/HomeController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "drawPathFromCurrentToDestination()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "07DEF357-8DCB-4C41-8353-3ACD112658AE - fb309deee85292b9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TookanTracker.HomeController.drawPathFromCurrentToDestination() -&gt; ()"
-                  moduleName = "TookanTracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Controller/HomeController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "1131">
-               </Location>
-               <Location
-                  uuid = "07DEF357-8DCB-4C41-8353-3ACD112658AE - a5b6a3c015826e0f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.String) -&gt; () in TookanTracker.HomeController.drawPathFromCurrentToDestination() -&gt; ()"
-                  moduleName = "TookanTracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/TookanTracker/Controller/HomeController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "397">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "346413ED-B285-4B35-BEDE-20002BAD5A78"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "drawPathFromCurrentToDestination()"
             landmarkType = "7">
          </BreakpointContent>
@@ -407,15 +231,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4E907B40-FBAD-447B-9230-F36B90C6A625"
+            uuid = "79341368-C7FD-478C-B2FA-FAEA8CBBBD51"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../TookanTracker/Controller/HomeController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "drawPathFromCurrentToDestination()"
             landmarkType = "7">
          </BreakpointContent>
@@ -423,128 +247,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "70D6F025-A310-4340-B62F-06B979075FC4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/TookanTracker.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "createSession(userID:apiKey:isUINeeded:navigationController:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8AE7FC25-BAE1-4940-A199-00B31A403392"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "807"
-            endingLineNumber = "807"
-            landmarkName = "sliderShareAction()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "26CB7BE8-570B-458F-BD3B-47CA5E890AF7"
+            uuid = "7F7F6927-C5DB-4690-918E-FD3A9E573FB7"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../TookanTracker/Helper/NetworkingHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "529"
-            endingLineNumber = "529"
-            landmarkName = "getPath(coordinate:destinationCoordinate:completionHander:mapview:)"
-            landmarkType = "7">
+            startingLineNumber = "531"
+            endingLineNumber = "531"
+            landmarkName = "NetworkingHelper"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2D4EF076-854E-49C0-898C-3BC9183645D5"
+            uuid = "9B961215-AC4C-4278-81DB-04F06B40895A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
+            filePath = "DemoApp/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "218"
-            endingLineNumber = "218"
-            landmarkName = "logoutAction(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "269DB9FF-25D6-4827-BD69-F7427C7E6DF3"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
-            landmarkName = "stopTrackingAction(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "383E7780-7885-4541-83A2-C16257C37E82"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
-            landmarkName = "stopTrackingConformation(pop:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "03F2677F-4ABC-4297-9C5D-E326679034B3"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
-            landmarkName = "setTrackingTitle()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "ECBD8C72-0DB4-4E51-BDF9-48C897C726C0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../TookanTracker/Controller/HomeController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
-            landmarkName = "startTracking()"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "signInAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

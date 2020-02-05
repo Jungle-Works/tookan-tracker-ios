@@ -21,7 +21,9 @@ class Jobs: NSObject{
     var jobPickupLng = ""
     var jobStatus = ""
     var jobType = ""
-    
+    override init() {
+        
+    }
     
     init(json:[String:Any]) {
     

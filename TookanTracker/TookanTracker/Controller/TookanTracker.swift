@@ -26,6 +26,9 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var agentDetailModel = AgentDetailModel(json: [:])
     var jobModel = JobModel()
     var jobData = JobData()
+    var jobs = Jobs()
+    public var getETA = ""
+    public var googleMapKey = ""
     var locationManager:CLLocationManager!
     var uiNeeded = false
     public func createSession(userID:String, apiKey: String,isUINeeded:Bool, navigationController:UINavigationController) {
@@ -50,6 +53,11 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                         self.jobModel = JobModel(json: data)
                         if let jobdata = data["jobs_data"] as? [String:Any]{
                             self.jobData = JobData(json: jobdata)
+                            if let job = jobdata["jobs"] as? [Any] {
+                                if let dict = job.first as? [String: Any] {
+                                    self.jobs = Jobs(json: dict)
+                                }
+                            }
                         }
                     }
                     self.registerForGoogle()
@@ -126,9 +134,10 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                         self.loc.registerAllRequiredInitilazers()
                         UserDefaults.standard.set(true, forKey: USER_DEFAULT.subscribeLocation)
                     }
-                } else {
-                    self.startSharingLocation()
                 }
+//                else {
+//                    self.startSharingLocation()
+//                }
             }
         }
     }
@@ -143,6 +152,13 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
         if let home  = storyboard.instantiateViewController(withIdentifier: STORYBOARD_ID.home) as? HomeController {
             home.trackingDelegate = self
             home.jobModel = self.jobModel
+            home.jobData = self.jobs
+            home.getETA = { eta in
+                print(eta)
+                if eta != "" {
+                    self.getETA = eta
+                }
+            }
             self.merchantNavigationController?.pushViewController(home, animated: true)
         }
     }
