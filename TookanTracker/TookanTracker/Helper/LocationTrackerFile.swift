@@ -61,7 +61,7 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
 
     
     let SDKVersion = "1.0"
-    
+    var sessionId = ""
     override init() {
         super.init()
         self.shareModel = LocationShareModel.sharedModel()
@@ -203,12 +203,6 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     }
     
     open func subsribeMQTTForTracking() {
-        //MqttClass.sharedInstance.hostAddress = self.host
-        //MqttClass.sharedInstance.portNumber = self.portNumber
-       // MqttClass.sharedInstance.accessToken = self.accessToken
-       // MqttClass.sharedInstance.key = self.uniqueKey
-      //  MqttClass.sharedInstance.mqttSetting()
-      //  MqttClass.sharedInstance.connectToServer()
         MqttClass.sharedInstance.topic = self.topic
         MqttClass.sharedInstance.subscribeLocation()
     }

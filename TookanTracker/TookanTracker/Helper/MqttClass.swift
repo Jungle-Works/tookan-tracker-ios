@@ -15,14 +15,14 @@ open class MqttClass: NSObject {
     static let sharedInstance = MqttClass()
     var cocoaMqtt: CocoaMQTT?
     var didConnectAck = false
-    var hostAddress = "broker.tookan.io"//"dev.tracking.tookan.io"////"test.mosquitto.org"//
+    var hostAddress = "tracking.tookan.io"//"dev.tracking.tookan.io"////"test.mosquitto.org"//
     var portNumber:UInt16 = 1883
     //var accessToken = ""
   //  var key = ""
     var topic = ""
     
     override init() {
-        cocoaMqtt = CocoaMQTT(clientID: "", host: hostAddress, port: portNumber)
+        cocoaMqtt = CocoaMQTT(clientId: "", host: hostAddress, port: portNumber)
     }
     
     func connectToServer() {
@@ -31,8 +31,6 @@ open class MqttClass: NSObject {
     
     func mqttSetting() {
         if let mqtt = cocoaMqtt {
-          //  mqtt.username = "t"
-           // mqtt.password = "t"
             mqtt.willMessage = CocoaMQTTWill(topic: "/will", message: "dieout")
             mqtt.keepAlive = 90
             mqtt.delegate = self
@@ -50,11 +48,11 @@ open class MqttClass: NSObject {
                 var sendDataArray = [Any]()
                 sendDataArray.append(sendData)
                 //mqttObject?.publish(topic: "UpdateLocation", withString: sendDataArray.jsonString, qos: .qos1, retained: false, dup: false)
-               _ = cocoaMqtt!.publish(self.topic, withString:sendDataArray.jsonString , qos: .qos2)
+                _ = cocoaMqtt!.publish(topic: self.topic, withString:sendDataArray.jsonString , qos: .QOS2)
                 
                // mqttObject?.willMessage = CocoaMQTTWill(topic: self.topic, message: sendDataArray.jsonString)
             } else {
-                if(cocoaMqtt?.connState == CocoaMQTTConnState.disconnected) {
+                if(cocoaMqtt?.connState == CocoaMQTTConnState.DISCONNECTED) {
                     self.mqttSetting()
                     self.connectToServer()
                 }
@@ -81,9 +79,9 @@ open class MqttClass: NSObject {
             if(didConnectAck == true) {
                 UserDefaults.standard.set(true, forKey: USER_DEFAULT.isHitInProgress)
                 UIApplication.shared.isNetworkActivityIndicatorVisible = true
-                _ = cocoaMqtt?.subscribe(self.topic, qos: CocoaMQTTQOS.qos2)
+                _ = cocoaMqtt?.subscribe(topic: self.topic, qos: CocoaMQTTQOS.QOS2)
             } else {
-                if(cocoaMqtt?.connState == CocoaMQTTConnState.disconnected) {
+                if(cocoaMqtt?.connState == CocoaMQTTConnState.DISCONNECTED) {
                     self.mqttSetting()
                     self.connectToServer()
                 }
@@ -92,23 +90,27 @@ open class MqttClass: NSObject {
     }
     
     func unsubscribeLocation() {
-       _ = cocoaMqtt?.unsubscribe(self.topic)
+        _ = cocoaMqtt?.unsubscribe(topic: self.topic)
     }
 }
 
 extension MqttClass: CocoaMQTTDelegate {
+    public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: NSError?) {
+        
+    }
+    
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnect host: String, port: Int) {
         print("didConnect \(host):\(port)")
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        if ack == .accept {
+        if ack == .ACCEPT {
            // _ = mqtt.subscribe(topic: self.accessToken, qos: CocoaMQTTQOS.QOS1)
             mqtt.ping()
             didConnectAck = true
             if UserDefaults.standard.bool(forKey: USER_DEFAULT.subscribeLocation) == true {
-                _ = mqtt.subscribe(self.topic, qos: CocoaMQTTQOS.qos2)
+                _ = mqtt.subscribe(topic: self.topic, qos: CocoaMQTTQOS.QOS2)
             }
            // _ = mqtt.publish(topic: "UpdateLocation", withString:"Hello" , qos: .QOS1)
         }
@@ -222,7 +224,7 @@ extension MqttClass: CocoaMQTTDelegate {
         UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
         
         if UserDefaults.standard.bool(forKey: USER_DEFAULT.subscribeLocation) == true {
-            if(mqtt.connState == CocoaMQTTConnState.disconnected) {
+            if(mqtt.connState == CocoaMQTTConnState.DISCONNECTED) {
                 self.mqttSetting()
                 self.connectToServer()
             }

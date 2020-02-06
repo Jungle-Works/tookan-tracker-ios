@@ -54,12 +54,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else {
@@ -92,12 +92,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else{
@@ -130,12 +130,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else {
@@ -197,12 +197,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else {
@@ -238,12 +238,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else {
@@ -277,12 +277,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else {
@@ -313,12 +313,12 @@ class NetworkingHelper: NSObject {
                         break
                         
                     case STATUS_CODES.SHOW_MESSAGE:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                         break
                         
                     default:
-                        Auxillary.showAlert(response["message"] as! String!)
+                        Auxillary.showAlert(response["message"] as? String ?? "")
                         receivedResponse(false, [:])
                     }
                 } else {

@@ -67,6 +67,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         
 //        self.loc.setLocationUpdate()
         self.loc.registerAllRequiredInitilazers()
+        self.loc.sessionId = self.jobModel?.sessionId ?? ""
 //        self.loc.initMqtt()
 //        self.loc.locationFrequencyMode = LocationFrequency.high
 //        self.loc.setLocationUpdate()
@@ -283,14 +284,14 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     
     
     func stopCalling(pop: Bool) {
-        let alertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: UIAlertControllerStyle.actionSheet)
-        let confirmAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive) { (confirmed) -> Void in
+        let alertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: UIAlertController.Style.actionSheet)
+        let confirmAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.destructive) { (confirmed) -> Void in
             self.stopTrackingButton.isHidden = true
             self.dismissVC()
 //            self.stopTracking(pop: pop)
         }
         
-        let cancelAction = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: {(UIAlertAction) in
+        let cancelAction = UIAlertAction(title: "No", style: UIAlertAction.Style.cancel, handler: {(UIAlertAction) in
         })
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
@@ -649,11 +650,11 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     }
     
     func alertPopupForTracking() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        let trackAction = UIAlertAction(title: "Track", style: UIAlertActionStyle.default) { (UIAlertAction) in
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        let trackAction = UIAlertAction(title: "Track", style: UIAlertAction.Style.default) { (UIAlertAction) in
             //            self.alertPopupForSessionId()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler:nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler:nil)
         alertController.addAction(trackAction)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
@@ -865,7 +866,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         }, completion: { finished in
             DispatchQueue.main.async {
 //                self.viewShowStatus = SHOW_HIDE.showLoadingStatus
-                UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: UIViewAnimationOptions(), animations: { () -> Void in
+                UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: UIView.AnimationOptions(), animations: { () -> Void in
 //                    self.bottomView.stopButton.isHidden = true
 //                    if(self.bottomView.sliderRequestShareButton != nil) {
 //                        self.bottomView.sliderRequestShareButton.isHidden = true
@@ -895,7 +896,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     }
     
     func stopSession() {
-        UIView.animate(withDuration: 0.5, delay:0.0, options: UIViewAnimationOptions.curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.5, delay:0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
 //            self.bottomView.transform = CGAffineTransform.identity
         }, completion: { finished in
             self.googleMapView.clear()
@@ -934,7 +935,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     }
     
     func dismissComplete() {
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: UIViewAnimationOptions(), animations: { () -> Void in
+        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: UIView.AnimationOptions(), animations: { () -> Void in
 //            self.bottomView.transform = CGAffineTransform.identity
         }, completion: nil)
     }
