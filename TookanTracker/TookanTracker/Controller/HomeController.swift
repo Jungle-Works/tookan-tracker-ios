@@ -42,6 +42,11 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     var jobData: Jobs?
     var getETA: ((String)->Void)?
     var etaDict: String = ""
+    var currentMarker:GMSMarker? = GMSMarker()
+    var startingPointMarker:GMSMarker? = GMSMarker()
+    var endPointMarker:GMSMarker? = GMSMarker()
+
+
 //    struct SHOW_HIDE {
 //        static let showBottomView = 1
 //        static let hideBottomView = 2
@@ -792,8 +797,106 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
             coordinate = CLLocationCoordinate2D()
         }
+        //self.createRoutePathArray(originCoordinate: coordinate!,pathCoordinates: path)
+        self.createRoutePathArray(originCoordinate: startingCoordinate, currentCoordinate: coordinate!, coordinateForBearing: lastSecondCoordinate, pathCoordinates: path,arrayCount:count)
         
     }
+        func createRoutePathArray(originCoordinate: CLLocationCoordinate2D, currentCoordinate:CLLocationCoordinate2D, coordinateForBearing: CLLocationCoordinate2D?, pathCoordinates:GMSMutablePath,arrayCount:Int) {
+            
+                googleMapView.clear()
+                let polyline = GMSPolyline(path: pathCoordinates)
+                polyline.strokeColor = UIColor(red: 62/255, green: 89/255, blue: 165/255, alpha: 1.0)
+                polyline.strokeWidth = 2.0
+                polyline.geodesic = true;
+                
+                // print(items: Any...)
+                CATransaction.begin()
+                CATransaction.setValue(NSNumber(value: 0.8), forKey: kCATransactionAnimationDuration)
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
+                    self.startingPointMarker?.position = originCoordinate
+                })
+                DispatchQueue.main.async {
+                    self.startingPointMarker?.map = self.googleMapView
+                }
+                
+                
+               // if [JOB_STATUS.successful,JOB_STATUS.canceled,JOB_STATUS.failed].contains(self.orderDetails.job_status!) == true {
+                    if arrayCount != 0 {
+                        DispatchQueue.main.async {
+                            self.endPointMarker?.position = currentCoordinate
+                            self.endPointMarker?.map = self.googleMapView
+                        }
+                    }
+                    self.currentMarker = nil
+                    let bounds = GMSCoordinateBounds(path: pathCoordinates)
+                    DispatchQueue.main.async {
+                        self.googleMapView!.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 10))
+                    }
+                    // })
+//                } else {
+//
+//                    if Singleton.sharedInstance.formDetailsInfo.verticalType != .taxi {
+//                        let camera = GMSCameraPosition.camera(withLatitude: currentCoordinate.latitude, longitude: currentCoordinate.longitude, zoom: self.googleMapView.camera.zoom)
+//                        DispatchQueue.main.async {
+//    //                        self.getDropOffLocation()
+//                            self.dropOffLocation = self.orderDetails.endPointLatLong
+//                            if self.dropOffLocation != nil  {
+//                                self.endPointMarker?.position = self.dropOffLocation!
+//                                self.endPointMarker?.map = self.googleMapView
+//                                pathCoordinates.add(self.dropOffLocation!)
+//                            }
+//                            self.googleMapView.animate(to: camera)
+//                        }
+//                    }else{
+//                        DispatchQueue.main.async {
+//                            self.getDropOffLocation()
+//                            if self.dropOffLocation != nil  {
+//                                self.endPointMarker?.position = self.dropOffLocation!
+//                                self.endPointMarker?.map = self.googleMapView
+//                                pathCoordinates.add(self.dropOffLocation!)
+//                            }
+//                            let bounds = GMSCoordinateBounds(path: pathCoordinates)
+//                            if self.isFirstTimeMapFrameSet == true{
+//                                if self.trackButton.isSelected == true {
+//                                    self.googleMapView!.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 120))
+//                                }else{
+//                                    self.googleMapView!.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 10))
+//                                }
+//                                self.isFirstTimeMapFrameSet = false
+//                            }
+//                        }
+//
+//                    }
+//
+//
+//                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now(), execute: {
+//                        if self.currentMarker == nil{
+//                            self.currentMarker = GMSMarker()
+//                            self.setMarkersImage()
+//                        }
+//                        UIView.animate(withDuration: 5, animations: {
+//                            self.currentMarker?.position = currentCoordinate //pathCoordinates.coordinate(at: pathCoordinates.count() - 1)
+//                            self.currentMarker?.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+//                            self.currentMarker?.zIndex = 1
+//                            if arrayCount != 0{
+//                                //                            DispatchQueue.main.async {
+//                                polyline.map = self.googleMapView
+//                                //                            }
+//                            }
+//                            if let _ = coordinateForBearing {
+//                                self.currentMarker?.rotation = self.getBearingBetweenTwoPoints(point1: coordinateForBearing!, point2: currentCoordinate)
+//                            }
+//                        })
+//                        print(currentCoordinate.longitude)
+//                        print(currentCoordinate.latitude)
+//
+//                    })
+//                    self.currentMarker?.map = self.googleMapView
+//                }
+                CATransaction.commit()
+                self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+        }
+
     
     func setMarker(_ originCoordinate: CLLocationCoordinate2D, marker:GMSMarker) {
         CATransaction.begin()
@@ -806,32 +909,32 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         CATransaction.commit()
     }
     
-    func createRoutePathArray(originCoordinate: CLLocationCoordinate2D) {
-        
-        let polyline = GMSPolyline(path: path)
-        polyline.strokeColor = UIColor.blue
-        polyline.strokeWidth = 8.0
-        polyline.geodesic = true;
-        
-        pathMarker.position = originCoordinate
-        pathMarker.icon = destinationMarker
-        
-        CATransaction.begin()
-        CATransaction.setValue(NSNumber(value: 2.0), forKey: kCATransactionAnimationDuration)
-        googleMapView.clear()
-        
-        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
-        self.currentCameraPosition = GMSCameraPosition.camera(withLatitude: originCoordinate.latitude, longitude: originCoordinate.longitude, zoom: self.mapCurrentZoomLevel)
-        if moving == true {
-            self.googleMapView.animate(to: self.currentCameraPosition)
-        }
-        polyline.map = googleMapView
-        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
-        if userStatus == USER_JOB_STATUS.trackingLocation {
-            pathMarker.map = googleMapView
-        }
-        CATransaction.commit()
-    }
+//    func createRoutePathArray(originCoordinate: CLLocationCoordinate2D,currentCoordinate:CLLocationCoordinate2D,coordinateForBearing: CLLocationCoordinate2D?,pathCoordinates:GMSMutablePath) {
+//
+//        let polyline = GMSPolyline(path: path)
+//        polyline.strokeColor = UIColor.blue
+//        polyline.strokeWidth = 8.0
+//        polyline.geodesic = true;
+//
+//        pathMarker.position = originCoordinate
+//        pathMarker.icon = destinationMarker
+//
+//        CATransaction.begin()
+//        CATransaction.setValue(NSNumber(value: 2.0), forKey: kCATransactionAnimationDuration)
+//        googleMapView.clear()
+//
+//        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+//        self.currentCameraPosition = GMSCameraPosition.camera(withLatitude: originCoordinate.latitude, longitude: originCoordinate.longitude, zoom: self.mapCurrentZoomLevel)
+//        if moving == true {
+//            self.googleMapView.animate(to: self.currentCameraPosition)
+//        }
+//        polyline.map = googleMapView
+//        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+//        if userStatus == USER_JOB_STATUS.trackingLocation {
+//            pathMarker.map = googleMapView
+//        }
+//        CATransaction.commit()
+//    }
     
     //MARK: LocationTrackerDelegate Method
     func currentLocationOfUser(_ location: CLLocation) {

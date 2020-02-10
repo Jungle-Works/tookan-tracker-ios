@@ -137,14 +137,19 @@ extension MqttClass: CocoaMQTTDelegate {
         print("didPublishAck with id: \(id)")
         UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
     }
-    
-    
+
     
     public func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
-        let locationDictionary = message.string?.jsonObjectArray[0] as! [String:Any]
         
-        if let locationString = locationDictionary["location"] as? String {
-            let locationArray = locationString.jsonObjectArray
+        var locationDictionary1 = [[String:Any]]()
+        
+        locationDictionary1 = message.string!.parseJSONString as! [[String : Any]]
+       // let locationDictionary = message.string?.jsonObjectArray[0] as! [String:Any]
+        let locationDictionary = locationDictionary1[0] as! [String: Any]
+        print(locationDictionary)
+
+        if let locationArray = (locationDictionary["location"] as? [[String: Any]]){
+           // let locationArray = locationString.jsonObjectArray
             for i in (0..<locationArray.count) {
                 let locationData = locationArray[i] as! [String:Any]
                 /*------- For Updating Path ------------*/
@@ -163,7 +168,21 @@ extension MqttClass: CocoaMQTTDelegate {
                 } else if let long = locationData["lng"] as? String {
                     longitudeString = Double(long)
                 }
+                
+                if latitudeString != nil && longitudeString != nil  {
+                    let coordinate = CLLocationCoordinate2D(latitude: latitudeString!, longitude: longitudeString!)
+                    locationDictionary = [
+                        "Latitude":coordinate.latitude,
+                        "Longitude":coordinate.longitude
+                    ]
+                    if let array = UserDefaults.standard.value(forKey: USER_DEFAULT.updatingLocationPathArray) as? [Any] {
+                        updatingLocationArray = array
+                    }
+                    updatingLocationArray.append(locationDictionary)
+                    UserDefaults.standard.setValue(updatingLocationArray, forKey: USER_DEFAULT.updatingLocationPathArray)
+                }
             }
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: OBSERVER.updatePath), object: nil)
         }
     }
     
@@ -200,3 +219,29 @@ extension MqttClass: CocoaMQTTDelegate {
         print("Delegate: \(info)")
     }
 }
+
+extension String
+{
+var parseJSONString: AnyObject?
+{
+    let data = self.data(using: String.Encoding.utf8, allowLossyConversion: false)
+    if let jsonData = data {
+        do {
+            let message = try JSONSerialization.jsonObject(with: jsonData, options:.mutableContainers)
+            if let jsonResult = message as? NSMutableArray {
+                return jsonResult //Will return the json array output
+            } else if let jsonResult = message as? NSMutableDictionary {
+                return jsonResult //Will return the json dictionary output
+            } else {
+                return nil
+            }
+        } catch let error as NSError {
+            print("An error occurred: \(error)")
+            return nil
+        }
+    } else {
+        return nil
+    }
+}
+}
+
