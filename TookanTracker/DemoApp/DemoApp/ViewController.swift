@@ -77,6 +77,8 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         self.emailTextField.placeholder = "Enter Agent Id"
         self.passwordTextField.placeholder = "Enter Job Id"
         self.userIdTextField.placeholder = "Enter User Id"
+        self.passwordTextField.text = "447162"
+        self.userIdTextField.text = "68451"
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
     }
