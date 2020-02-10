@@ -754,24 +754,45 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     
     //MARK: MAP
     @objc func updatePath() {
-        guard self.loc.myLocationAccuracy < self.loc.maxAccuracy else {
-            return
-        }
-        self.googleMapView.isMyLocationEnabled = true
+        //self.googleMapView.isMyLocationEnabled = true
         self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
-        path = GMSMutablePath()
-        var coordinate = CLLocationCoordinate2D()
+        let path = GMSMutablePath()
+        var startingCoordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
+        startingCoordinate = CLLocationCoordinate2D()
+        
+        var coordinate: CLLocationCoordinate2D?
+        var lastSecondCoordinate: CLLocationCoordinate2D?
+        var count = Int()
         if let locationDictionaryArray = UserDefaults.standard.value(forKey: USER_DEFAULT.updatingLocationPathArray) as? [Any] {
+            print("locationDictionaryArray count",locationDictionaryArray.count )
+            print("locationDictionaryArray val",locationDictionaryArray)
+            count = locationDictionaryArray.count
             for i in (0..<locationDictionaryArray.count) {
                 if let locationDictionary = locationDictionaryArray[i] as? [String:Any] {
                     let latitudeString = locationDictionary["Latitude"] as! NSNumber
                     let longitudeString = locationDictionary["Longitude"] as! NSNumber
                     coordinate = CLLocationCoordinate2D(latitude: latitudeString.doubleValue, longitude: longitudeString.doubleValue)
-                    path.add(CLLocationCoordinate2D(latitude: locationDictionary["Latitude"] as! Double, longitude: locationDictionary["Longitude"] as! Double))
+                    path.add(coordinate!)
+                    if i == 0 {
+                        startingCoordinate = coordinate!
+                    }
+                    if locationDictionaryArray.count > 1 {
+                        if i == (locationDictionaryArray.count - 2) {
+                            lastSecondCoordinate = coordinate
+                        }
+                    }
+                    
+                    print("inloop coordinate \(i)", coordinate ?? 0)
                 }
             }
         }
-        self.createRoutePathArray(originCoordinate: coordinate)
+        
+        
+        if coordinate == nil {
+            coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
+            coordinate = CLLocationCoordinate2D()
+        }
+        
     }
     
     func setMarker(_ originCoordinate: CLLocationCoordinate2D, marker:GMSMarker) {

@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,CLLocationManagerDelegate 
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         self.window?.makeKeyAndVisible()
-        
+        LocationTrackerFile.sharedInstance().setLocationUpdate()
         return true
     }
 

@@ -20,13 +20,16 @@ open class MqttClass: NSObject {
     //var accessToken = ""
   //  var key = ""
     var topic = ""
+    var connectVar = false
     
     override init() {
-        cocoaMqtt = CocoaMQTT(clientId: "", host: hostAddress, port: portNumber)
+        let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
+        cocoaMqtt = CocoaMQTT(clientId: clientID, host: hostAddress, port: portNumber)
     }
     
     func connectToServer() {
         _ = cocoaMqtt!.connect()
+        self.connectVar = true
     }
     
     func mqttSetting() {
@@ -96,7 +99,16 @@ open class MqttClass: NSObject {
 
 extension MqttClass: CocoaMQTTDelegate {
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: NSError?) {
-        
+        didConnectAck = false
+        _console("mqttDidDisconnect")
+        print(err?.localizedDescription ?? "error")
+        if UserDefaults.standard.bool(forKey: "subscribeLocation") == true {
+            if(mqtt.connState == CocoaMQTTConnState.DISCONNECTED) {
+                self.mqttSetting()
+                self.connectToServer()
+
+            }
+        }
     }
     
     
@@ -105,54 +117,20 @@ extension MqttClass: CocoaMQTTDelegate {
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        if ack == .ACCEPT {
-           // _ = mqtt.subscribe(topic: self.accessToken, qos: CocoaMQTTQOS.QOS1)
-            mqtt.ping()
-            didConnectAck = true
-            if UserDefaults.standard.bool(forKey: USER_DEFAULT.subscribeLocation) == true {
-                _ = mqtt.subscribe(topic: self.topic, qos: CocoaMQTTQOS.QOS2)
-            }
+//        if ack == .ACCEPT {
+//           // _ = mqtt.subscribe(topic: self.accessToken, qos: CocoaMQTTQOS.QOS1)
+//            mqtt.ping()
+//            didConnectAck = true
+//            if UserDefaults.standard.bool(forKey: USER_DEFAULT.subscribeLocation) == true {
+                _ = mqtt.subscribe(topic: "f96141995a638aa922a1774be9febe66")
+//            }
            // _ = mqtt.publish(topic: "UpdateLocation", withString:"Hello" , qos: .QOS1)
         }
         
-    }
+//    }
     
     public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        print("didPublishMessage with message: \(message.string)")
-        var locationArray = [Any]()
-        if let array = UserDefaults.standard.object(forKey: USER_DEFAULT.locationArray) as? [Any]{
-            locationArray = array
-        }
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-        
-        var sentLocationArray = [Any]()
-        if let sentJsonString = message.string {
-            let locationObject = sentJsonString.jsonObjectArray
-            let locationObjectArray = locationObject[0] as! [String:Any]
-            let locationString = locationObjectArray["location"] as! String
-            sentLocationArray = locationString.jsonObjectArray
-        }
-        
-        for i in (0..<sentLocationArray.count) {
-            //  print(sentLocationArray[i])
-            let sendDictionaryObject = sentLocationArray[i] as! [String:Any]
-            //  locationArray.addObject(sendDictionaryObject)
-            //  print(sendDictionaryObject)
-            if let sendTimeStamp = sendDictionaryObject["tm_stmp"] as? String {
-                for j in (0..<locationArray.count) {
-                    let locationDictionaryObject = locationArray[j] as! [String:Any]
-                    if let locationTimeStamp = locationDictionaryObject["tm_stmp"] as? String {
-                        if(sendTimeStamp == locationTimeStamp) {
-                            locationArray.remove(at: j)
-                            break
-                        }
-                    }
-                }
-            }
-        }
-        UserDefaults.standard.set(locationArray, forKey: USER_DEFAULT.locationArray)
-        UserDefaults.standard.synchronize()
-        UserDefaults.standard.set(false, forKey: USER_DEFAULT.isHitInProgress)
+
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
@@ -185,20 +163,7 @@ extension MqttClass: CocoaMQTTDelegate {
                 } else if let long = locationData["lng"] as? String {
                     longitudeString = Double(long)
                 }
-
-                let coordinate = CLLocationCoordinate2D(latitude: latitudeString!, longitude: longitudeString!)
-                locationDictionary = ["Latitude":coordinate.latitude, "Longitude":coordinate.longitude]
-                if let array = UserDefaults.standard.value(forKey: USER_DEFAULT.updatingLocationPathArray) as? [Any] {
-                    updatingLocationArray = array
-                }
-                updatingLocationArray.append(locationDictionary)
-                UserDefaults.standard.setValue(updatingLocationArray, forKey: USER_DEFAULT.updatingLocationPathArray)
-                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: OBSERVER.updatePath), object: nil)
-                /*----------------------------------------------*/
-                
             }
-        } else {
-            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: OBSERVER.stopTracking), object: nil)
         }
     }
     

@@ -140,7 +140,10 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
 
     open func initMqtt() {
         MqttClass.sharedInstance.mqttSetting()
+        if MqttClass.sharedInstance.connectVar != true{
         MqttClass.sharedInstance.connectToServer()
+        }
+        self.subsribeMQTTForTracking()
     }
     
     open func setLocationUpdate() {
@@ -203,7 +206,7 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     }
     
     open func subsribeMQTTForTracking() {
-        MqttClass.sharedInstance.topic = self.topic
+        MqttClass.sharedInstance.topic = "f96141995a638aa922a1774be9febe66"
         MqttClass.sharedInstance.subscribeLocation()
     }
     
@@ -237,25 +240,13 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     }
     
     open func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if (self.shareModel!.timer != nil) {
-            return
-        }
-
-        self.shareModel!.bgTask = BackgroundTaskManager.sharedBackgroundTaskManager()
-        _ = self.shareModel!.bgTask!.beginNewBackgroundTask()
         if locations.last != nil {
-            self.myLocation = locations.last! as CLLocation
-            self.sendLocationThroughUDP(socketLocation: self.myLocation)
-            self.myLocationAccuracy = self.myLocation.horizontalAccuracy
-            if(self.sendFirstTimeLocation == true) {
-                var locationDict:[String:Any] = ["latitude" : "\(self.myLocation.coordinate.latitude)"]
-                locationDict["longitude"] = "\(self.myLocation.coordinate.longitude)"
-                print(locationDict)
-                //let locationDict = ["latitude" : "\(self.myLocation.coordinate.latitude)", "longitude" : "\(self.myLocation.coordinate.longitude)"]
-                UserDefaults.standard.set(locationDict, forKey: USER_DEFAULT.lastAccurateUserLocation)
-                self.sendFirstTimeLocation = false
+            if firstTime == true {
+                self.myLocation = locations.last! as CLLocation
+//                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: NOTIFICATION_OBSERVER.currentLocationFetched), object: self)
+                firstTime = false
             }
-            
+            self.locationManager.stopUpdatingLocation()
         }
     }
    func sendLocationThroughUDP(socketLocation:CLLocation){

@@ -296,6 +296,45 @@ class NetworkingHelper: NSObject {
         }
     }
     
+    func parsingLocations(locationArray:[Any]) {
+        if locationArray.count > 0 {
+            for i in (0..<locationArray.count) {
+                if let locationData = locationArray[i] as? [String:Any] {
+                    /*------- For Updating Path ------------*/
+                    var locationDictionary = [String:Any]()
+                    var updatingLocationArray = [Any]()
+                    var latitudeString:Double?
+                    var longitudeString:Double?
+                    if let lat = locationData["lat"] as? NSNumber {
+                        latitudeString = Double(truncating: lat)
+                    } else if let lat = locationData["lat"] as? String {
+                        latitudeString = Double(lat)
+                    }
+                    
+                    if let long = locationData["lng"] as? NSNumber {
+                        longitudeString = Double(truncating: long)
+                    } else if let long = locationData["lng"] as? String {
+                        longitudeString = Double(long)
+                    }
+                    if latitudeString != nil && longitudeString != nil  {
+                        let coordinate = CLLocationCoordinate2D(latitude: latitudeString!, longitude: longitudeString!)
+                        locationDictionary = [
+                            "Latitude":coordinate.latitude,
+                            "Longitude":coordinate.longitude
+                        ]
+                        if let array = UserDefaults.standard.value(forKey: USER_DEFAULT.updatingLocationPathArray) as? [Any] {
+                            updatingLocationArray = array
+                        }
+                        updatingLocationArray.append(locationDictionary)
+                        UserDefaults.standard.setValue(updatingLocationArray, forKey: USER_DEFAULT.updatingLocationPathArray)
+                    }
+                    /*----------------------------------------------*/
+                }
+                
+            }
+        }
+//        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: NOTIFICATION_OBSERVER.updatePath), object: nil)
+    }
     func stopTracking(_ sessionID:String,userID: String, apiKey:String, receivedResponse:@escaping (_ succeeded:Bool, _ response:[String:Any]) -> ()){
         var params : [String : Any] = ["session_id": sessionID]
         params["unique_user_id"] = userID
