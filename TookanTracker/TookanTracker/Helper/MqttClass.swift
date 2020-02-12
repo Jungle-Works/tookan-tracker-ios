@@ -117,17 +117,9 @@ extension MqttClass: CocoaMQTTDelegate {
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-//        if ack == .ACCEPT {
-//           // _ = mqtt.subscribe(topic: self.accessToken, qos: CocoaMQTTQOS.QOS1)
-//            mqtt.ping()
-//            didConnectAck = true
-//            if UserDefaults.standard.bool(forKey: USER_DEFAULT.subscribeLocation) == true {
-                _ = mqtt.subscribe(topic: "f96141995a638aa922a1774be9febe66")
-//            }
-           // _ = mqtt.publish(topic: "UpdateLocation", withString:"Hello" , qos: .QOS1)
-        }
-        
-//    }
+        _ = mqtt.subscribe(topic: self.topic)
+ }
+
     
     public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
 

@@ -38,6 +38,7 @@ class JobModel :NSObject{
           
           if let value = json["session_id"] as? String{
               self.sessionId = value
+               LocationTrackerFile.sharedInstance().sessionId = value
           }
           
           if let value = json["session_url"] as? String{

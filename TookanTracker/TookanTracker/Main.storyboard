@@ -236,6 +236,12 @@
                             <constraint firstItem="fdr-6d-jKe" firstAttribute="leading" secondItem="0pV-sP-9sJ" secondAttribute="leading" id="i4J-Uv-uTk"/>
                             <constraint firstItem="i0Y-ta-mOO" firstAttribute="top" secondItem="0pV-sP-9sJ" secondAttribute="top" id="mak-Wn-YHf"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="tCD-8p-QvU"/>
+                                <exclude reference="nmx-Sv-wQE"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="Jn6-MI-4jU"/>
                     <connections>
