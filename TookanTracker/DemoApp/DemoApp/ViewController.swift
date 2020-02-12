@@ -43,20 +43,6 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-//        if navigationController != nil {
-//            if UserDefaults.standard.bool(forKey: USER_DEFAULT.isSessionExpire) == false {
-//                if let id = UserDefaults.standard.value(forKey: USER_DEFAULT.userId) as? String {
-//                    UserDefaults.standard.set(false, forKey: USER_DEFAULT.isSessionExpire)
-//
-//                    TookanTracker.shared.delegate = self
-//                    TookanTracker.shared.createSession(userID:id, apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
-//
-//                }
-//
-//            }
-//        }
-        
         self.setTopLabel()
         self.setTextField()
         self.setSignInButton()
@@ -88,14 +74,13 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     }
     
     func setSignInButton() {
-//        self.signInButton.layer.cornerRadius = 30.0
         self.signInButton.setTitle("Start Tarcking", for: .normal)
         self.signInButton.backgroundColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
         self.signInButton.setTitleColor(UIColor.white, for: .normal)
     }
     
     func setSignUpButton() {
-//        self.signup.layer.cornerRadius = 30.0
+
         self.signup.setTitle("Start Tracking For Agent", for: .normal)
         self.signup.backgroundColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
         self.signup.setTitleColor(UIColor.white, for: .normal)
@@ -111,7 +96,6 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         TookanTracker.shared.googleMapKey = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"
         TookanTracker.shared.createSession(userID: "27278", apiKey: apiKey, isUINeeded: false, navigationController: self.navigationController!)
         TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: "\(self.passwordTextField.text ?? "")", userId: "\(self.userIdTextField.text ?? "")")
-        //        "job_id" : 446113,446358,446627,"user_id" : 68451,
 
         
     }
@@ -121,8 +105,8 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         TookanTracker.shared.delegate = self
         TookanTracker.shared.googleMapKey = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"
         TookanTracker.shared.createSession(userID:"68451", apiKey: apiKey, isUINeeded: false, navigationController:self.navigationController!)
-        TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "\(self.userIdTextField.text ?? "")")//"68451")//"27278")
-//        "fleet_id" : 54700,"user_id" : 68451,
+        TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "\(self.userIdTextField.text ?? "")")
+
 
         
     }
@@ -137,17 +121,7 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         return (value / 375) * SCREEN_SIZE.width
     }
    
-    func loginAction() {
-        //        let response = loc.startLocationService()
-        //        if(response.0 == true) {
-        //            self.resetLocationTimer()
-        //            getLocationTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(self.startSession), userInfo: nil, repeats: true)
-        //        } else {
-        //            print(response.1)
-        //            UIAlertView(title: "", message: response.1, delegate: self, cancelButtonTitle: "OK").show()
-        //        }
-    }
-    
+
     //MARK: RESET LOCATION TIMER
     func resetLocationTimer() {
         if getLocationTimer != nil {
@@ -156,15 +130,7 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         }
     }
     
-    //MARK: START SESSION
-    //    @objc func startSession() {
-    //        let location = loc.getCurrentLocation()
-    //        if  location != nil && location?.coordinate.latitude != 0.0 {
-    //            self.resetLocationTimer()
-    ////            self.startSessionHit(sessionId: "", location: location!,requestId: "")
-    //        }
-    //    }
-    
+
     
     func getSessionId(sessionId: String) {
         print("Sessionid: \(sessionId)")

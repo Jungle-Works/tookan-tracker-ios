@@ -240,6 +240,7 @@
                             <mask key="subviews">
                                 <exclude reference="tCD-8p-QvU"/>
                                 <exclude reference="nmx-Sv-wQE"/>
+                                <exclude reference="i0Y-ta-mOO"/>
                             </mask>
                         </variation>
                     </view>

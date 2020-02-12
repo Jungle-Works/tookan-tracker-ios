@@ -31,14 +31,14 @@ struct SERVER {
     static let live = "https://test-tracking.tookan.io/" //"http://52.23.253.217:8888/" //
 }
 
-//let APIKeyForGoogleMaps = "AIzaSyDqZn_rsqd_ZMQUITSKB5FGerbn6DwtdLg"//"AIzaSyDX32ar9JhpTYR1W3vGAAjzQTGeOx7MWm4"//"AIzaSyBFXsZ_biHbFbNkY05VRZ59YnhS6FWSYyg"
+
 struct GoogleMapsUtils{
     
     static let iOSGoogleMapKey = APIKeyForGoogleMaps
     
     static let GoogleApiUrl = "https://maps.googleapis.com"
     
-    static let keyForWhiteLabel = "enter_your_key" // Please use your key
+    static let keyForWhiteLabel = "enter_your_key" 
     
     static func getDirectionUrl(_ from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> String {
         
