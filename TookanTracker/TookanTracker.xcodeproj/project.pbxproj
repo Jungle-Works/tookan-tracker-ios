@@ -82,7 +82,26 @@
 		5EF84B8223E837A400935BFB /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EF84B7D23E837A400935BFB /* ytcpsocket.c */; };
 		5EF84B8323E837A400935BFB /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF84B7E23E837A400935BFB /* ysocket.swift */; };
 		5EF84B8423E837A400935BFB /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF84B7F23E837A400935BFB /* ytcpsocket.swift */; };
+		EC22D75D2473EA2B00D6886A /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC22D75B2473EA2B00D6886A /* Mapbox.framework */; };
+		EC22D75E2473EA2C00D6886A /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EC22D75B2473EA2B00D6886A /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EC22D75F2473EA2C00D6886A /* MapboxMobileEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC22D75C2473EA2B00D6886A /* MapboxMobileEvents.framework */; };
+		EC22D7602473EA2C00D6886A /* MapboxMobileEvents.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EC22D75C2473EA2B00D6886A /* MapboxMobileEvents.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EC22D7612473EA2C00D6886A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EC22D7602473EA2C00D6886A /* MapboxMobileEvents.framework in Embed Frameworks */,
+				EC22D75E2473EA2C00D6886A /* Mapbox.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		260C75511FCFF559003E957E /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
@@ -151,6 +170,8 @@
 		5EF84B7D23E837A400935BFB /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
 		5EF84B7E23E837A400935BFB /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		5EF84B7F23E837A400935BFB /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ytcpsocket.swift; sourceTree = "<group>"; };
+		EC22D75B2473EA2B00D6886A /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
+		EC22D75C2473EA2B00D6886A /* MapboxMobileEvents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MapboxMobileEvents.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,8 +195,10 @@
 				26F5BDA51FC82AFC000D2715 /* CoreTelephony.framework in Frameworks */,
 				260C75561FCFF559003E957E /* GoogleMaps.framework in Frameworks */,
 				26F5BDA61FC82AFC000D2715 /* CoreLocation.framework in Frameworks */,
+				EC22D75F2473EA2C00D6886A /* MapboxMobileEvents.framework in Frameworks */,
 				26F5BD9C1FC82AE8000D2715 /* Accelerate.framework in Frameworks */,
 				260C75591FCFF559003E957E /* GooglePlaces.framework in Frameworks */,
+				EC22D75D2473EA2B00D6886A /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +311,8 @@
 		26F5BD9A1FC82AE8000D2715 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EC22D75B2473EA2B00D6886A /* Mapbox.framework */,
+				EC22D75C2473EA2B00D6886A /* MapboxMobileEvents.framework */,
 				26B566611FCFE400003CF50E /* libz.1.dylib */,
 				26F5BDB51FC82B4A000D2715 /* UIKit.framework */,
 				26F5BDB31FC82B45000D2715 /* SystemConfiguration.framework */,
@@ -370,6 +395,7 @@
 				26F5BD471FC817BB000D2715 /* Frameworks */,
 				26F5BD481FC817BB000D2715 /* Headers */,
 				26F5BD491FC817BB000D2715 /* Resources */,
+				EC22D7612473EA2C00D6886A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -640,6 +666,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TookanTracker/SDK",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = TookanTracker/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -673,6 +700,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TookanTracker/SDK",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = TookanTracker/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

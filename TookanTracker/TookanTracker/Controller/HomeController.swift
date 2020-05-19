@@ -9,6 +9,12 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+import Mapbox
+
+enum MapType {
+    case google
+    case flightMap
+}
 
 
 class HomeController: UIViewController, LocationTrackerDelegate {
@@ -26,7 +32,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     @IBOutlet var selectionView: UIView!
     @IBOutlet var lblETAValue: UILabel!
     @IBOutlet var viewETA: UIView!
-    @IBOutlet weak var googleMapView: GMSMapView!
+    @IBOutlet weak var mapView: UIView!
     @IBOutlet var currentLocation: UIButton!
     @IBOutlet var logout: UIButton!
     @IBOutlet var stopTrackingButton: UIButton!
@@ -65,9 +71,15 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             return .lightContent
         }
     }
+
+    var googleMapView: GMSMapView?
+    var flightMapView: MGLMapView?
+    var mapType: MapType = .flightMap
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // MARK: Setup Map View
+        setupMapView(with: self.mapType)
         /*----------------- Location Tracker --------------*/
         self.viewETA.isHidden = true
         self.selectionView.isHidden = false
@@ -83,23 +95,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
         self.currentLocation.setImage(getCurrentLocation?.withRenderingMode(.alwaysTemplate), for: .normal)
         self.currentLocation.tintColor = UIColor.white
-        
-        /*----------------- Google Map ---------------*/
-        
-        if let styleURL = frameworkBundle?.url(forResource: "style", withExtension: "json") {
-            do {
-                // Set the map style by passing the URL of the local file.
-                self.googleMapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
-            } catch {
-                NSLog("The style definition could not be loaded: \(error)")
-            }
-        } else {
-            NSLog("Unable to find style.json")
-        }
-        self.googleMapView.delegate = self
-        
-        
-        
+
         /*--------------- Set User Status ----------------*/
         if model.isSessionIdExist() == true {
             if model.isTrackingLocation() == true {
@@ -159,6 +155,35 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         /*-------------------------------------------------*/
         
         
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.googleMapView?.frame = mapView.bounds
+        self.flightMapView?.frame = mapView.bounds
+    }
+
+    func setupMapView(with type: MapType) {
+        switch type {
+        case .google:
+            self.googleMapView = GMSMapView()
+            if let styleURL = frameworkBundle?.url(forResource: "style", withExtension: "json") {
+                do {
+                    // Set the map style by passing the URL of the local file.
+                    self.googleMapView?.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+                } catch {
+                    NSLog("The style definition could not be loaded: \(error)")
+                }
+            } else {
+                NSLog("Unable to find style.json")
+            }
+            self.mapView.addSubview(googleMapView!)
+            self.googleMapView?.delegate = self
+
+        case .flightMap:
+            self.flightMapView = MGLMapView(frame: self.mapView.bounds, styleURL: FlightMapConfig.styleLight)
+            self.mapView.addSubview(flightMapView!)
+        }
     }
     
     func getImage(from string: String) -> UIImage? {
@@ -244,7 +269,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             }else{
                 bounds = GMSCoordinateBounds(coordinate: originCoordinate, coordinate: destinationCoordinate)
                 let update = GMSCameraUpdate.fit(bounds, withPadding: CGFloat(40))
-                self.googleMapView.moveCamera(update)
+                self.googleMapView?.moveCamera(update)
                 let imageString = ""//"https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
                 if imageString != ""{
                     if let image = self.getImage(from: imageString ){
@@ -260,7 +285,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
            
 //            self.setMarker(originCoordinate, destinationCoordinate: destinationCoordinate, minOrigin: minOrigin,durationDict:durationDict)
             // change the camera, set the zoom, whatever.  Just make sure to call the animate* method.
-            self.googleMapView.animate(toViewingAngle: 0)
+            self.googleMapView?.animate(toViewingAngle: 0)
             let imageString = ""
             if TookanTracker.shared.jobArrayCount > 1{
                  let first = 0
@@ -349,7 +374,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                        }
                        self.endPointMarker?.map = self.googleMapView
                        self.endPointMarker?.isFlat = true
-                       self.googleMapView.selectedMarker = self.endPointMarker
+                       self.googleMapView?.selectedMarker = self.endPointMarker
             if durationDict != nil {
                 let dict = "\(durationDict!["text"] as? String ?? "")"
                     self.etaDict = dict
@@ -447,13 +472,13 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             } else {
                 self.setMarker(originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20,durationDict:durationDict)
             }
-        }, mapview: self.googleMapView)
+        }, mapview: self.googleMapView ?? GMSMapView())
         })
       }
     
     
     func setMarker(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat,durationDict: [String:AnyObject]?){
-         googleMapView.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+         googleMapView?.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         let imageString = ""//"https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
              if imageString != ""{
                  if let image = self.getImage(from: imageString ){
@@ -548,7 +573,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             endPointMarker?.title = durationDict!["text"] as? String ?? ""
         }
         endPointMarker?.isFlat = true
-        self.googleMapView.selectedMarker = endPointMarker
+        self.googleMapView?.selectedMarker = endPointMarker
          let northEastCoordinate = CLLocationCoordinate2D(latitude: max(originCoordinate.latitude, destinationCoordinate.latitude), longitude: max(originCoordinate.longitude, destinationCoordinate.longitude))
          let southWestCoordinate = CLLocationCoordinate2D(latitude: min(originCoordinate.latitude, destinationCoordinate.latitude), longitude: min(originCoordinate.longitude, destinationCoordinate.longitude))
          
@@ -557,11 +582,11 @@ class HomeController: UIViewController, LocationTrackerDelegate {
          
          let bounds = GMSCoordinateBounds(coordinate: originCoordinate, coordinate: destinationCoordinate)
          let update = GMSCameraUpdate.fit(bounds, withPadding: CGFloat(40))
-         googleMapView.moveCamera(update)
+         googleMapView?.moveCamera(update)
      }
     
     func setMarkerForJob(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat){
-         googleMapView.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+         googleMapView?.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
           let imageString = ""
                if imageString != ""{
                    if let image = self.getImage(from: imageString ){
@@ -654,7 +679,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
           self.endPointMarker?.position = destinationCoordinate
           self.endPointMarker?.map = self.googleMapView
         endPointMarker?.isFlat = true
-        self.googleMapView.selectedMarker = endPointMarker
+        self.googleMapView?.selectedMarker = endPointMarker
          let northEastCoordinate = CLLocationCoordinate2D(latitude: max(originCoordinate.latitude, destinationCoordinate.latitude), longitude: max(originCoordinate.longitude, destinationCoordinate.longitude))
          let southWestCoordinate = CLLocationCoordinate2D(latitude: min(originCoordinate.latitude, destinationCoordinate.latitude), longitude: min(originCoordinate.longitude, destinationCoordinate.longitude))
          
@@ -663,7 +688,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
          
          let bounds = GMSCoordinateBounds(coordinate: originCoordinate, coordinate: destinationCoordinate)
          let update = GMSCameraUpdate.fit(bounds, withPadding: CGFloat(40))
-         googleMapView.moveCamera(update)
+         googleMapView?.moveCamera(update)
         if TookanTracker.shared.jobArrayCount > 1{
             self.setJobMarkers()
         }
@@ -793,7 +818,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 DispatchQueue.main.async {
                     self.stopTrackingButton.isHidden = false
                     if isSucceeded == true {
-                        self.googleMapView.clear()
+                        self.googleMapView?.clear()
                         self.userStatus = USER_JOB_STATUS.free
                         self.loc.stopLocationService()
                         self.model.resetAllData()
@@ -1077,8 +1102,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         CATransaction.begin()
         CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude, longitude: location.coordinate.longitude, zoom: 16)
-        self.googleMapView.animate(to: camera)
-        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+        self.googleMapView?.animate(to: camera)
+        self.mapCurrentZoomLevel = self.googleMapView?.camera.zoom ?? 16.0
         CATransaction.commit()
         
         
@@ -1153,7 +1178,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 self.licenceNumber.text = id.licenseNumber
                 self.driverName.text = id.fleetName
                 self.contactNumber = "\(id.fleetPhone)"
-                self.googleMapView.clear()
+                self.googleMapView?.clear()
                 self.jobData?.jobStatus = id.jobStatus
                 if self.jobData?.fleetID != id.fleetID{
                     self.trackingDelegate.logout?()
@@ -1175,7 +1200,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     //MARK: MAP
     @objc func updatePath() {
         
-        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+        self.mapCurrentZoomLevel = self.googleMapView?.camera.zoom ?? 16.0
         let path = GMSMutablePath()
         var startingCoordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
         startingCoordinate = CLLocationCoordinate2D()
@@ -1220,7 +1245,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 self.drawPath(points, originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin: 0.5 + 20, durationDict: nil, setBoundOnlyOnOrigin: true)
                 }
                 
-                  }, mapview: self.googleMapView)
+                  }, mapview: self.googleMapView ?? GMSMapView())
         })
     }
     func movingMarker(originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D){
@@ -1231,9 +1256,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 CATransaction.begin()
                 CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
 
-                self.googleMapView.animate(toViewingAngle: 0)
-                self.googleMapView.camera = GMSCameraPosition.camera(withTarget: originCoordinate, zoom: 15)
-                self.googleMapView.animate(toLocation: originCoordinate)
+                self.googleMapView?.animate(toViewingAngle: 0)
+                self.googleMapView?.camera = GMSCameraPosition.camera(withTarget: originCoordinate, zoom: 15)
+                self.googleMapView?.animate(toLocation: originCoordinate)
            let imageString = ""
                 if imageString != ""{
                     if let image = self.getImage(from: imageString ){
@@ -1329,7 +1354,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                            self.endPointMarker?.position = destinationCoordinate
                            self.endPointMarker?.map = self.googleMapView
                            self.endPointMarker?.isFlat = true
-                           self.googleMapView.selectedMarker = self.endPointMarker
+                           self.googleMapView?.selectedMarker = self.endPointMarker
 //              if TookanTracker.shared.jobArrayCount > 1{
 //                 self.setJobMarkers()
 //                }
@@ -1357,8 +1382,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         CATransaction.begin()
         CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude, longitude: location.coordinate.longitude, zoom: Float(self.mapCurrentZoomLevel))
-        self.googleMapView.animate(to: camera)
-        self.googleMapView.animate(toViewingAngle: 45)
+        self.googleMapView?.animate(to: camera)
+        self.googleMapView?.animate(toViewingAngle: 45)
         CATransaction.commit()
     }
     
@@ -1413,7 +1438,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         UIView.animate(withDuration: 0.5, delay:0.0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
 
         }, completion: { finished in
-            self.googleMapView.clear()
+            self.googleMapView?.clear()
             self.userStatus = USER_JOB_STATUS.free
 
             self.loc.stopLocationService()
@@ -1467,9 +1492,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         CATransaction.begin()
         CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
         let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 16)
-        self.googleMapView.animate(to: camera)
+        self.googleMapView?.animate(to: camera)
         self.setMarker(coordinate, marker: self.pathMarker)
-        self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+        self.mapCurrentZoomLevel = self.googleMapView?.camera.zoom ?? 16.0
         CATransaction.commit()
     }
     
@@ -1508,10 +1533,10 @@ extension HomeController: GMSAutocompleteViewControllerDelegate, GMSMapViewDeleg
             CATransaction.begin()
             CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
             let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude, longitude: place.coordinate.longitude, zoom: 16)
-            self.googleMapView.animate(to: camera)
+            self.googleMapView?.animate(to: camera)
             
             self.setMarker(place.coordinate, marker: self.searchMarker!)
-            self.mapCurrentZoomLevel = self.googleMapView.camera.zoom
+            self.mapCurrentZoomLevel = self.googleMapView?.camera.zoom ?? 16.0
             CATransaction.commit()
         }
     }

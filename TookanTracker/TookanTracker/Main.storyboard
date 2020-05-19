@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="6el-ee-H8O">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="6el-ee-H8O">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -25,10 +25,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="fvN-0A-F9o">
-                                <rect key="frame" x="127.5" y="233" width="120" height="121"/>
+                                <rect key="frame" x="67" y="172.5" width="241" height="242"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tracker" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rp5-tk-WOb">
-                                <rect key="frame" x="141.5" y="389" width="92" height="33"/>
+                                <rect key="frame" x="141.5" y="449.5" width="92" height="33"/>
                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -40,7 +40,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tookanLogo" translatesAutoresizingMaskIntoConstraints="NO" id="OPT-Hc-oQJ">
-                                <rect key="frame" x="246.5" y="632" width="11.5" height="16"/>
+                                <rect key="frame" x="246.5" y="624" width="23" height="32"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -263,7 +263,7 @@
                                     <constraint firstItem="yq3-hp-Z7g" firstAttribute="top" secondItem="jDY-lK-OIA" secondAttribute="top" constant="5" id="zy2-X6-Oqm"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdr-6d-jKe" customClass="GMSMapView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdr-6d-jKe">
                                 <rect key="frame" x="0.0" y="110" width="375" height="592"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -322,10 +322,10 @@
                         <outlet property="detailView" destination="1fT-fm-XPX" id="5JA-4I-xyi"/>
                         <outlet property="driverName" destination="yq3-hp-Z7g" id="4HH-la-rYq"/>
                         <outlet property="googleMapTopConstraint" destination="jn2-h4-1DZ" id="voL-tM-cOC"/>
-                        <outlet property="googleMapView" destination="fdr-6d-jKe" id="aq4-gF-EzC"/>
                         <outlet property="lblETAValue" destination="7uo-K1-1Ij" id="0im-Ay-GVR"/>
                         <outlet property="licenceNumber" destination="Gqe-9w-OZT" id="iOK-W0-1dC"/>
                         <outlet property="logout" destination="uO5-jL-Lnf" id="eQn-8P-UlY"/>
+                        <outlet property="mapView" destination="fdr-6d-jKe" id="Phd-Gw-bgM"/>
                         <outlet property="profileImage" destination="jDY-lK-OIA" id="6OF-Tk-8sE"/>
                         <outlet property="selectionView" destination="OGV-L5-uoH" id="1XM-o3-3TU"/>
                         <outlet property="stopTrackingButton" destination="0ql-od-vMp" id="8r8-PI-EVW"/>
