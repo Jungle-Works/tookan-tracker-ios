@@ -31,6 +31,25 @@ struct SERVER {
     static let live = "https://api.tookanapp.com/" //"http://52.23.253.217:8888/" //
 }
 
+struct FlightMapUtils {
+
+    static func getDirectionUrl(_ from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> String {
+        let jsonObject:[String: Any] = ["lat":"\(from.latitude)", "lng": "\(from.longitude)"]
+        let jsonObject2:[String: Any] = ["lat": "\(to.latitude)", "lng": "\(to.longitude)"]
+        let pointsParams:[[String: Any]] = [jsonObject, jsonObject2]
+        var requestString = String()
+        switch TookanTracker.shared.mapType {
+        case .google:
+            requestString = "https://maps.flightmap.io/api/directions?points=\(pointsParams.jsonString.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: " ", with: ""))&options=2&api_key=\(TookanTracker.shared.googleMapKey)&driving_mode=car&traffic=1"
+        case .flightMap:
+            requestString = "https://maps.flightmap.io/api/directions?points=\(pointsParams.jsonString.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: " ", with: ""))&driving_mode=car&fm_token=\(TookanTracker.shared.flightMapKey)&traffic=1"
+        }
+
+
+        return requestString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+    }
+}
+
 
 struct GoogleMapsUtils{
     

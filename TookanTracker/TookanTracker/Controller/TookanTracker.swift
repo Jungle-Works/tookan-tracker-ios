@@ -37,7 +37,9 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var uiNeeded = false
     var jobID = ""
     var isHideUserDetailOnTop = false
-   var completionHandler: ((_ viewC: UIViewController)->())?
+    var completionHandler: ((_ viewC: UIViewController)->())?
+    var mapType: MapType = .flightMap
+    public var flightMapKey = String()
     //completionHandler: ((_ mapViewController: UIViewController)->())?
     
     public func createSession(userID:String,isUINeeded:Bool, isHideUserDetailOnTop: Bool = true, completionHandler: ((_ mapViewController: UIViewController)->())?) {
@@ -54,6 +56,18 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
         UserDefaults.standard.set(userID, forKey: USER_DEFAULT.userId)
         self.isHideUserDetailOnTop = isHideUserDetailOnTop
         self.loc.trackingDelegate = self
+    }
+
+    public func initializeMap(mapType: String, key: String) {
+        if let type = MapType(rawValue: mapType) {
+            self.mapType = type
+            switch type {
+            case .google:
+                self.googleMapKey = key
+            case .flightMap:
+                self.flightMapKey = key
+            }
+        }
     }
     
     public func startTarckingByJob(sharedSecertId: String, jobId: String, userId: String){
