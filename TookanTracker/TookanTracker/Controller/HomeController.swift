@@ -511,8 +511,6 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         let destinationCoordinate = self.getLatitudeLongitudeOfDest()
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
-
-
             NetworkingHelper.sharedInstance.fetchFlightRoute(originCoordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
                 if points.count > 0 {
                     self.drawPath(points, originCoordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate:destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: false)

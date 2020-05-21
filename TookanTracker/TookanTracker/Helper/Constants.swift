@@ -83,7 +83,6 @@ struct GoogleMapsUtils{
 }
 
 struct FlightMapConfig {
-    static let accessToken = "2e769c60-174c-11ea-acdf-896965e04014"
     static let styleLight = URL(string: "https://maps.flightmap.io/styles/style-bright.json")
     static let styleDark = URL(string: "https://maps.flightmap.io/styles//style-dark.json")
 }
