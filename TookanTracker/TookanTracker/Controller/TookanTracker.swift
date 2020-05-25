@@ -10,6 +10,7 @@ import Foundation
 import GooglePlaces
 import GoogleMaps
 import CoreLocation
+import Mapbox
 
 @objc public protocol TookanTrackerDelegate {
     @objc optional func getCurrentCoordinates(_ location:CLLocation)
@@ -66,6 +67,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                 self.googleMapKey = key
             case .flightMap:
                 self.flightMapKey = key
+                MGLAccountManager.accessToken = key
             }
         }
     }
