@@ -268,6 +268,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
                 //flight polyline
                 if let locationArray = NetworkingHelper.sharedInstance.decodePolylineForCoordinates(encodedPathString) {
+                    self.flightMapView?.removeAnnotation(self.flightPolyline)
                     var coordinates = [CLLocationCoordinate2D]()
                     for location in locationArray {
                         coordinates.append(location.coordinate)
@@ -1324,7 +1325,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             NetworkingHelper.sharedInstance.fetchFlightRoute(coordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
                 //            NetworkingHelper.sharedInstance.getPath(coordinate: coordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
                 if points.count > 0 {
-                    self.drawPath(points, originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin: 0.5 + 20, durationDict: nil, setBoundOnlyOnOrigin: true)
+                    self.drawPath(points, originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin: 0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: true)
                 }
                 
             })
