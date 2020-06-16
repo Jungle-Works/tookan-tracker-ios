@@ -95,8 +95,8 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signInAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-        TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "2e769c60-174c-11ea-acdf-896965e04014")
-//        TookanTracker.shared.initializeMap(mapType: "GOOGLE_MAP", key: "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU")
+//        TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "2e769c60-174c-11ea-acdf-896965e04014")
+        TookanTracker.shared.initializeMap(mapType: "GOOGLE_MAP", key: "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU")
         TookanTracker.shared.apiKey = apiKey
 //        TookanTracker.shared.createSession(userID: "27278",isUINeeded: false, navigationController: self.navigationController!)
         TookanTracker.shared.createSession(userID: "27278", isUINeeded: true,isHideUserDetailOnTop: false, completionHandler: { (viewC) in

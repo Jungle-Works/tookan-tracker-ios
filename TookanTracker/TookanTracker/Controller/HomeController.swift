@@ -1286,13 +1286,18 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         let path = GMSMutablePath()
         var startingCoordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
         startingCoordinate = CLLocationCoordinate2D()
-        
+        var bearing = String()
         var coordinate: CLLocationCoordinate2D?
         var lastSecondCoordinate: CLLocationCoordinate2D?
         var count = Int()
+        
         if let locationDictionaryArray = UserDefaults.standard.value(forKey: USER_DEFAULT.updatingLocationPathArray) as? [Any] {
             print("locationDictionaryArray count",locationDictionaryArray.count )
             print("locationDictionaryArray val",locationDictionaryArray)
+            if let locationDict = locationDictionaryArray[locationDictionaryArray.count-1] as? [String: Any] {
+                bearing = locationDict["bearing"] as! String
+            }
+
             count = locationDictionaryArray.count
             for i in (0..<locationDictionaryArray.count) {
                 if let locationDictionary = locationDictionaryArray[i] as? [String:Any] {
@@ -1320,7 +1325,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             coordinate = CLLocationCoordinate2D()
         }
         let destinationCoordinate = self.getLatitudeLongitudeOfDest()
-        self.movingMarker(originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D())
+        self.movingMarker(originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), bearing: Double(bearing))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+TookanTracker.shared.delayTimer, execute: {
             NetworkingHelper.sharedInstance.fetchFlightRoute(coordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
                 //            NetworkingHelper.sharedInstance.getPath(coordinate: coordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
@@ -1331,7 +1336,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             })
         })
     }
-    func movingMarker(originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D){
+    func movingMarker(originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D, bearing: Double? = 0.0){
         DispatchQueue.main.async {
             guard UIApplication.shared.applicationState == UIApplication.State.active else {
                 return
@@ -1435,6 +1440,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
 
             self.startingPointMarker?.position = originCoordinate
+            self.startingPointMarker?.rotation = bearing ?? 0.0
 
             self.startingPointMarker?.map = self.googleMapView
             self.endPointMarker?.position = destinationCoordinate
@@ -1446,8 +1452,13 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             //                }
 
             self.flightStartMarker.coordinate = originCoordinate
+            self.flightMapView?.removeAnnotation(self.flightStartMarker)
             self.flightMapView?.addAnnotation(self.flightStartMarker)
-            self.flightMapView?.printCurrentMarker(with: self.startingPointMarker?.icon, annotation: self.flightStartMarker)
+            var rotation = Double()
+            if let angle = bearing {
+                rotation = self.deg2rad(angle)
+            }
+            self.flightMapView?.printCurrentMarker(with: self.startingPointMarker?.icon, annotation: self.flightStartMarker, rotation: CGFloat(rotation))
 
             self.flightEndMarker.coordinate = destinationCoordinate
             self.flightMapView?.addAnnotation(self.flightEndMarker)
@@ -1456,6 +1467,10 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
             CATransaction.commit()
         }
+    }
+
+    func deg2rad(_ number: Double) -> Double {
+        return number * .pi / 180
     }
     func setMarker(_ originCoordinate: CLLocationCoordinate2D, marker:GMSMarker) {
         CATransaction.begin()
@@ -1691,12 +1706,36 @@ extension MGLMapView {
         }
     }
 
-    func printCurrentMarker(with image: UIImage?, annotation: MGLAnnotation) {
+    func printCurrentMarker(with image: UIImage?, annotation: MGLAnnotation, rotation: CGFloat = 0.0) {
         let id = "\(annotation.coordinate.latitude)+\(annotation.coordinate.longitude)"
         let annotationImage = self.dequeueReusableAnnotationImage(withIdentifier: id)
-        annotationImage?.image = image
+        print(image?.rotate(radians: rotation))
+        annotationImage?.image = image?.rotate(radians: rotation)
     }
 
+}
+
+extension UIImage {
+    func rotate(radians: CGFloat) -> UIImage {
+        let rotatedSize = CGRect(origin: .zero, size: size)
+            .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
+            .integral.size
+        UIGraphicsBeginImageContext(rotatedSize)
+        if let context = UIGraphicsGetCurrentContext() {
+            let origin = CGPoint(x: rotatedSize.width / 2.0,
+                                 y: rotatedSize.height / 2.0)
+            context.translateBy(x: origin.x, y: origin.y)
+            context.rotate(by: radians)
+            draw(in: CGRect(x: -origin.y, y: -origin.x,
+                            width: size.width, height: size.height))
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            return rotatedImage ?? self
+        }
+
+        return self
+    }
 }
 
 extension HomeController: MGLMapViewDelegate {
