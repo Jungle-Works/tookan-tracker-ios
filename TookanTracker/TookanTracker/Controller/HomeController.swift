@@ -295,7 +295,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
                 //flight map camera update
                 let flightCoordinates: [CLLocationCoordinate2D] = [originCoordinate, destinationCoordinate]
-                self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 40.0, left: 40.0, bottom: 40.0, right: 40.0), animated: true)
+                self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 200.0, left: 100.0, bottom: 100.0, right: 100.0), animated: true)
 
                 let imageString = ""//"https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
                 if imageString != ""{
@@ -420,6 +420,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             self.flightEndMarker.title = durationDict!["text"] as? String ?? ""
             self.flightMapView?.addAnnotation(self.flightEndMarker)
             self.flightMapView?.printCurrentMarker(with: self.endPointMarker?.icon, annotation: self.flightEndMarker)
+            self.flightMapView?.selectAnnotation(self.flightEndMarker, animated: true, completionHandler: nil)
             
             if let eta = self.getETA {
                 eta(self.etaDict)
@@ -649,7 +650,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         self.flightMapView?.printCurrentMarker(with: self.endPointMarker?.icon, annotation: self.flightEndMarker)
 
         let flightCoordinates = [originCoordinate, destinationCoordinate]
-        self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 40.0, left: 40.0, bottom: 40.0, right: 40.0), animated: true)
+        self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 200.0, left: 100.0, bottom: 100.0, right: 100.0), animated: true)
     }
     
     func setMarkerForJob(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat){
@@ -667,39 +668,42 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             let last = TookanTracker.shared.jobArray.count
             let interval = 1
             let sequence = stride(from: first, to: last, by: interval)
-            for element in sequence {
-                let cateAryrray = TookanTracker.shared.jobArray[element]
-                switch cateAryrray.jobType {
-                case "0":
-                    if imageString != ""{
-                        if let image = self.getImage(from: imageString ){
-                            self.endPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
-                        }
-                    }else{
-                        self.endPointMarker?.icon = UIImage(named: "arrived_pickup", in: frameworkBundle, compatibleWith: nil)
-                    }
 
-                    break
-                case "1":
-                    if imageString != ""{
-                        if let image = self.getImage(from: imageString ){
-                            self.endPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
+            for element in sequence {
+                if TookanTracker.shared.jobArray[element].jobId == TookanTracker.shared.jobID{
+                    let cateAryrray = TookanTracker.shared.jobArray[element]
+                    switch cateAryrray.jobType {
+                    case "0":
+                        if imageString != ""{
+                            if let image = self.getImage(from: imageString ){
+                                self.endPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
+                            }
+                        }else{
+                            self.endPointMarker?.icon = UIImage(named: "arrived_pickup", in: frameworkBundle, compatibleWith: nil)
                         }
-                    }else{
-                        self.endPointMarker?.icon = UIImage(named: "arrived_delivery", in: frameworkBundle, compatibleWith: nil)
-                    }
-                    break
-                case "2":
-                    if imageString != ""{
-                        if let image = self.getImage(from: imageString ){
-                            self.endPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
+
+                        break
+                    case "1":
+                        if imageString != ""{
+                            if let image = self.getImage(from: imageString ){
+                                self.endPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
+                            }
+                        }else{
+                            self.endPointMarker?.icon = UIImage(named: "arrived_delivery", in: frameworkBundle, compatibleWith: nil)
                         }
-                    }else{
-                        self.endPointMarker?.icon = UIImage(named: "arrived_appointment", in: frameworkBundle, compatibleWith: nil)
+                        break
+                    case "2":
+                        if imageString != ""{
+                            if let image = self.getImage(from: imageString ){
+                                self.endPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
+                            }
+                        }else{
+                            self.endPointMarker?.icon = UIImage(named: "arrived_appointment", in: frameworkBundle, compatibleWith: nil)
+                        }
+                        break
+                    default:
+                        break
                     }
-                    break
-                default:
-                    break
                 }
             }
 
@@ -766,7 +770,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         self.flightMapView?.printCurrentMarker(with: self.endPointMarker?.icon, annotation: self.flightEndMarker)
 
         let flightCoordinates = [originCoordinate, destinationCoordinate]
-        self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 40.0, left: 40.0, bottom: 40.0, right: 40.0), animated: true)
+        self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 200.0, left: 100.0, bottom: 100.0, right: 100.0), animated: true)
 
 
         if TookanTracker.shared.jobArrayCount > 1{
@@ -855,6 +859,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     func stopCalling(pop: Bool) {
         let alertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: UIAlertController.Style.actionSheet)
         let confirmAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.destructive) { (confirmed) -> Void in
+            TookanTracker.shared.jobArray.removeAll()
             self.stopTrackingButton.isHidden = true
             self.dismissVC()
         }
@@ -1709,8 +1714,13 @@ extension MGLMapView {
     func printCurrentMarker(with image: UIImage?, annotation: MGLAnnotation, rotation: CGFloat = 0.0) {
         let id = "\(annotation.coordinate.latitude)+\(annotation.coordinate.longitude)"
         let annotationImage = self.dequeueReusableAnnotationImage(withIdentifier: id)
-        print(image?.rotate(radians: rotation))
-        annotationImage?.image = image?.rotate(radians: rotation)
+        if rotation == 0.0 {
+            annotationImage?.image = image
+        } else {
+            print(image?.rotate(radians: rotation))
+            annotationImage?.image = image?.rotate(radians: rotation)
+        }
+
     }
 
 }
