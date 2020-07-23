@@ -39,6 +39,8 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     @IBOutlet var signInButton: UIButton!
     @IBOutlet var signup: UIButton!
     
+    @IBOutlet weak var mapType: UITextField!
+    @IBOutlet weak var mapKey: UITextField!
     @IBOutlet var userIdTextField: UITextField!
     
     override func viewDidLoad() {
@@ -65,6 +67,12 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         self.emailTextField.placeholder = "Please Update Path update time in second"
         self.passwordTextField.placeholder = "Enter Job Id"
         self.userIdTextField.placeholder = "Enter User Id"
+        self.mapType.placeholder = "Enter Map Type (FLIGHT_MAP)"
+        self.mapKey.placeholder = "Enter Map Key"
+        self.passwordTextField.placeholderColor(color: .black)
+        self.userIdTextField.placeholderColor(color: .black)
+        self.mapType.placeholderColor(color: .black)
+        self.mapKey.placeholderColor(color: .black)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
     }
@@ -73,6 +81,8 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         self.emailTextField.resignFirstResponder()
         self.passwordTextField.resignFirstResponder()
         self.userIdTextField.resignFirstResponder()
+        self.mapType.resignFirstResponder()
+        self.mapKey.resignFirstResponder()
     }
     
     func setSignInButton() {
@@ -95,11 +105,12 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signInAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-//        TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "2e769c60-174c-11ea-acdf-896965e04014")
-        TookanTracker.shared.initializeMap(mapType: "GOOGLE_MAP", key: "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU")
+//        TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "enter map key")
+        
+        TookanTracker.shared.initializeMap(mapType: "\(self.mapType.text ?? "")", key: "\(self.mapKey.text ?? "")")
         TookanTracker.shared.apiKey = apiKey
 //        TookanTracker.shared.createSession(userID: "27278",isUINeeded: false, navigationController: self.navigationController!)
-        TookanTracker.shared.createSession(userID: "27278", isUINeeded: true,isHideUserDetailOnTop: false, completionHandler: { (viewC) in
+        TookanTracker.shared.createSession(userID: "\(self.userIdTextField.text ?? "")", isUINeeded: true,isHideUserDetailOnTop: false, completionHandler: { (viewC) in
         self.navigationController?.pushViewController(viewC, animated: true)
         })
         TookanTracker.shared.delayTimer = Double("\(self.emailTextField.text ?? "")") ?? 60.0
@@ -111,7 +122,7 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     
     @IBAction func signupAction(_ sender: Any) {
         TookanTracker.shared.delegate = self
-        TookanTracker.shared.googleMapKey = "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU"
+        TookanTracker.shared.googleMapKey = ""
 //        TookanTracker.shared.createSession(userID:"68451",isUINeeded: false, navigationController:self.navigationController!)
         TookanTracker.shared.startTrackingByAgent(sharedSecertId: "tookan-sdk-345#!@", fleetId: "\(self.emailTextField.text ?? "")", userId: "\(self.userIdTextField.text ?? "")")
 
@@ -146,3 +157,12 @@ class ViewController: UIViewController, TookanTrackerDelegate {
     }
 }
 
+extension UITextField {
+    func placeholderColor(color: UIColor) {
+        let attributeString = [
+            NSAttributedString.Key.foregroundColor: color.withAlphaComponent(0.6),
+            NSAttributedString.Key.font: self.font!
+            ] as [NSAttributedString.Key : Any]
+        self.attributedPlaceholder = NSAttributedString(string: self.placeholder!, attributes: attributeString)
+    }
+}
