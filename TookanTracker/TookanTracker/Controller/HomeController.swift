@@ -756,9 +756,12 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         _ = GMSCameraPosition(target: CLLocationCoordinate2D(latitude: (northEastCoordinate.latitude + southWestCoordinate.latitude)/2, longitude: (northEastCoordinate.longitude + southWestCoordinate.longitude)/2), zoom: 12, bearing: 0, viewingAngle: 0)
 
 
-        let bounds = GMSCoordinateBounds(coordinate: originCoordinate, coordinate: destinationCoordinate)
-        let update = GMSCameraUpdate.fit(bounds, withPadding: CGFloat(40))
-        googleMapView?.moveCamera(update)
+        DispatchQueue.main.async {
+            let bounds = GMSCoordinateBounds(coordinate: originCoordinate, coordinate: destinationCoordinate)
+            let update = GMSCameraUpdate.fit(bounds, withPadding: CGFloat(40))
+            self.googleMapView?.animate(with: update)
+        }
+
 
         // flight map marker
         self.flightStartMarker.coordinate = originCoordinate
