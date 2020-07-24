@@ -772,13 +772,27 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         self.flightMapView?.addAnnotation(self.flightEndMarker)
         self.flightMapView?.printCurrentMarker(with: self.endPointMarker?.icon, annotation: self.flightEndMarker)
 
-        let flightCoordinates = [originCoordinate, destinationCoordinate]
-        self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 200.0, left: 100.0, bottom: 100.0, right: 100.0), animated: true)
+
+        var flightCoordinates = [originCoordinate, destinationCoordinate]
+        flightCoordinates += self.getAllMarkerCoordinates()
+        DispatchQueue.main.async {
+            self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 40.0, left: 40.0, bottom: 100.0, right: 40.0), animated: true)
+        }
+
 
 
         if TookanTracker.shared.jobArrayCount > 1{
             self.setJobMarkers()
         }
+    }
+
+    func getAllMarkerCoordinates() -> [CLLocationCoordinate2D]{
+        var coordinates = [CLLocationCoordinate2D]()
+        let array = TookanTracker.shared.jobArray
+        for element in array {
+            coordinates.append(CLLocationCoordinate2D(latitude: Double(element.jobPickupLat)!, longitude: Double(element.jobPickupLng)!))
+        }
+        return coordinates
     }
     
     func setTrackingButton() {
