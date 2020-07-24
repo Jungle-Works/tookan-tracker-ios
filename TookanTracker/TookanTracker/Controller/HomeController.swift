@@ -126,6 +126,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                         switch TookanTracker.shared.jobArray[i].jobStatus{
                         case JOB_STATUS.started, JOB_STATUS.arrived:
                             self.drawPathFromCurrentToDestination()
+                            
                             break
                         default:
                             self.setMarkerForJob(self.getLatitudeLongitudeOf() ?? CLLocationCoordinate2D(), destinationCoordinate: self.getLatitudeLongitudeOfDest() ?? CLLocationCoordinate2D(), minOrigin: 0.5 + 20)
@@ -280,6 +281,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
                 break
             default:
+                self.endPointMarker?.title = ""
+                self.flightEndMarker.title = ""
                 break
             }
 
