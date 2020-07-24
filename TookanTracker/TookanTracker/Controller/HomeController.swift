@@ -328,6 +328,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 let sequence = stride(from: first, to: last, by: interval)
                 for element in sequence {
                     let cateAryrray = TookanTracker.shared.jobArray[element]
+                    if TookanTracker.shared.jobArray[element].jobId != TookanTracker.shared.jobID{
+                    
                     switch cateAryrray.jobType {
                     case "0":
                         if imageString != ""{
@@ -359,6 +361,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                         break
                     default:
                         break
+                    }
                     }
                 }
 
@@ -458,8 +461,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 marker.position =  CLLocationCoordinate2D.init(latitude: mylatitude!, longitude: mylongitude!)
                 switch cateAryrray.jobType {
                 case "0":
-                    let imageString = "https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
-                    if imageString != nil{
+                    let imageString = ""
+                    if imageString != ""{
                         if let image = self.getImage(from: imageString ){
                             marker.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
                         }
@@ -469,8 +472,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
 
                     break
                 case "1":
-                    let imageString = "https://tookan.s3.amazonaws.com/company_images/UmTo1581675480321-178191bwgp7l.jpeg"
-                    if imageString != nil{
+                    let imageString = ""
+                    if imageString != ""{
                         if let image = self.getImage(from: imageString ){
                             marker.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
                         }
@@ -479,8 +482,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                     }
                     break
                 case "2":
-                    let imageString = "https://tookan.s3.amazonaws.com/company_images/UmTo1581675480321-178191bwgp7l.jpeg"
-                    if imageString != nil{
+                    let imageString = ""
+                    if imageString != ""{
                         if let image = self.getImage(from: imageString ){
                             marker.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
                         }
@@ -549,6 +552,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             let interval = 1
             let sequence = stride(from: first, to: last, by: interval)
             for element in sequence {
+                if TookanTracker.shared.jobArray[element].jobId != TookanTracker.shared.jobID{
                 let cateAryrray = TookanTracker.shared.jobArray[element]
                 switch cateAryrray.jobType {
                 case "0":
@@ -581,6 +585,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                     break
                 default:
                     break
+                }
                 }
             }
 
@@ -1277,7 +1282,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
                 }else{
-                    TookanTracker.shared.createSession(userID: id.userID, isUINeeded: false, completionHandler: { (view) in
+                    TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true, completionHandler: { (view) in
                         self.navigationController?.pushViewController(view, animated: true)
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
@@ -1298,7 +1303,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         var coordinate: CLLocationCoordinate2D?
         var lastSecondCoordinate: CLLocationCoordinate2D?
         var count = Int()
-        
+        self.flightMapView?.selectAnnotation(self.flightEndMarker, animated: false, completionHandler: nil)
         if let locationDictionaryArray = UserDefaults.standard.value(forKey: USER_DEFAULT.updatingLocationPathArray) as? [Any] {
             print("locationDictionaryArray count",locationDictionaryArray.count )
             print("locationDictionaryArray val",locationDictionaryArray)
