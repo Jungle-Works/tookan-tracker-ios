@@ -107,10 +107,10 @@ class ViewController: UIViewController, TookanTrackerDelegate {
         TookanTracker.shared.delegate = self
 //        TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "enter map key")
         
-        TookanTracker.shared.initializeMap(mapType: "\(self.mapType.text ?? "")", key: "\(self.mapKey.text ?? "")")
+        TookanTracker.shared.initializeMap(mapType: "GOOGLE_MAP", key: "AIzaSyDHjZIxrZR2R9RAVCb3YXs_FOP5bbFeVgU")
         TookanTracker.shared.apiKey = apiKey
 //        TookanTracker.shared.createSession(userID: "27278",isUINeeded: false, navigationController: self.navigationController!)
-        TookanTracker.shared.createSession(userID: "\(self.userIdTextField.text ?? "")", isUINeeded: true,isHideUserDetailOnTop: false, completionHandler: { (viewC) in
+        TookanTracker.shared.createSession(userID: "\(self.userIdTextField.text ?? "")", isUINeeded: true,isHideUserDetailOnTop: true, completionHandler: { (viewC) in
         self.navigationController?.pushViewController(viewC, animated: true)
         })
         TookanTracker.shared.delayTimer = Double("\(self.emailTextField.text ?? "")") ?? 60.0

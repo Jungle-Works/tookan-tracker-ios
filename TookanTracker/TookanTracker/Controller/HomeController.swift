@@ -91,7 +91,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         /*----------------- Location Tracker --------------*/
         self.viewETA.isHidden = true
         self.selectionView.isHidden = false
-        if isHideTopUserDetailView {
+        self.isHideTopUserDetailView = TookanTracker.shared.isHideUserDetailOnTop
+        if !self.isHideTopUserDetailView {
             self.detailView.isHidden = true
             self.googleMapTopConstraint.constant = 0
         }
@@ -1294,12 +1295,12 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 self.jobData?.jobStatus = id.jobStatus
                 if self.jobData?.fleetID != id.fleetID{
                     self.trackingDelegate.logout?()
-                    TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true, completionHandler: { (view) in
+                    TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true,isHideUserDetailOnTop: true, completionHandler: { (view) in
                         self.navigationController?.pushViewController(view, animated: true)
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
                 }else{
-                    TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true, completionHandler: { (view) in
+                    TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true,isHideUserDetailOnTop: true, completionHandler: { (view) in
                         self.navigationController?.pushViewController(view, animated: true)
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
