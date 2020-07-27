@@ -332,7 +332,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 let sequence = stride(from: first, to: last, by: interval)
                 for element in sequence {
                     let cateAryrray = TookanTracker.shared.jobArray[element]
-                    if TookanTracker.shared.jobArray[element].jobId != TookanTracker.shared.jobID{
+                    if TookanTracker.shared.jobArray[element].jobId == TookanTracker.shared.jobID{
                     
                     switch cateAryrray.jobType {
                     case "0":
@@ -1308,12 +1308,12 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 if self.jobData?.fleetID != id.fleetID{
                     self.trackingDelegate.logout?()
                     TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true,isHideUserDetailOnTop: true, completionHandler: { (view) in
-                        self.navigationController?.pushViewController(view, animated: true)
+                        self.navigationController?.pushViewController(view, animated: false)
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
                 }else{
                     TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true,isHideUserDetailOnTop: true, completionHandler: { (view) in
-                        self.navigationController?.pushViewController(view, animated: true)
+                        self.navigationController?.pushViewController(view, animated: false)
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
                 }

@@ -73,6 +73,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     }
     
     public func startTarckingByJob(sharedSecertId: String, jobId: String, userId: String){
+        self.jobArray.removeAll()
         NetworkingHelper.sharedInstance.getLocationForJobTracking(sharedSecert: sharedSecertId, jobId: jobId, userId: userId) { (isSucceeded, response) in
             DispatchQueue.main.async {
                 self.jobID = jobId
