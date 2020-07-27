@@ -427,7 +427,8 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             self.flightEndMarker.title = durationDict!["text"] as? String ?? ""
             self.flightMapView?.addAnnotation(self.flightEndMarker)
             self.flightMapView?.printCurrentMarker(with: self.endPointMarker?.icon, annotation: self.flightEndMarker)
-            self.flightMapView?.selectAnnotation(self.flightEndMarker, animated: true, completionHandler: nil)
+            self.flightMapView?.deselectAnnotation(self.flightEndMarker, animated: false)
+            self.flightMapView?.selectAnnotation(self.flightEndMarker, animated: false, completionHandler: nil)
             
             if let eta = self.getETA {
                 eta(self.etaDict)
@@ -1293,6 +1294,17 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 self.googleMapView?.clear()
                 self.flightMapView?.clear()
                 self.jobData?.jobStatus = id.jobStatus
+                if id.jobStatus == JOB_STATUS.successful {
+                    let alertController = UIAlertController(title: nil, message: "Task Successful", preferredStyle: .alert)
+                    let alertAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+                        TookanTracker.shared.jobArray.removeAll()
+                        self.stopTrackingButton.isHidden = true
+                        self.dismissVC()
+                    }
+                    alertController.addAction(alertAction)
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
                 if self.jobData?.fleetID != id.fleetID{
                     self.trackingDelegate.logout?()
                     TookanTracker.shared.createSession(userID: id.userID, isUINeeded: true,isHideUserDetailOnTop: true, completionHandler: { (view) in
