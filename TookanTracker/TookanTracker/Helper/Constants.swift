@@ -14,8 +14,8 @@ class Constants: NSObject {
 }
 let IP_ADDRESS = "test.tookanapp.com"
 let PORT = 8015
-let SERVER_PORT = 2  // 1 dev, 2 test, 3 Live
-let SERVER_KEY = 1 // 1 Test, 2 Live
+let SERVER_PORT = 3  // 1 dev, 2 test, 3 Live
+let SERVER_KEY = 2 // 1 Test, 2 Live
 let APIKeyForGoogleMaps = TookanTracker.shared.googleMapKey
 var globalAPIKey = ""
 var globalUserId = ""

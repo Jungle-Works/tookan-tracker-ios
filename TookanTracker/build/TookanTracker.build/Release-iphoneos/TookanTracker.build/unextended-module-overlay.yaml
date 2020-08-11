@@ -1,0 +1,13 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/mukulkansal/Library/Developer/Xcode/DerivedData/TookanTracker-dcznyoobpihobxgsiutbfsfebcti/Build/Products/Release-iphoneos/TookanTracker.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/mukulkansal/Documents/git/tracking-sdk-ios/TookanTracker/build/TookanTracker.build/Release-iphoneos/TookanTracker.build/unextended-module.modulemap",
+    }]
+  }]
+}
