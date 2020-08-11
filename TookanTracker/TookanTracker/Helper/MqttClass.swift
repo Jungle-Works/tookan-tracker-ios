@@ -21,7 +21,7 @@ open class MqttClass: NSObject {
   //  var key = ""
     var topic = ""
     var connectVar = false
-    
+    var location = ""
     override init() {
         let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
         cocoaMqtt = CocoaMQTT(clientId: clientID, host: hostAddress, port: portNumber)
@@ -43,6 +43,7 @@ open class MqttClass: NSObject {
     func sendLocation(_ location:String) {
         if IJReachability.isConnectedToNetwork() == true {
             if(didConnectAck == true) {
+                self.location = location
                 UserDefaults.standard.set(true, forKey: USER_DEFAULT.isHitInProgress)
                 UIApplication.shared.isNetworkActivityIndicatorVisible = true
                 var sendData : [String:Any] = ["location":"\(location)"]
@@ -114,6 +115,14 @@ extension MqttClass: CocoaMQTTDelegate {
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnect host: String, port: Int) {
         print("didConnect \(host):\(port)")
+        UserDefaults.standard.set(true, forKey: USER_DEFAULT.isHitInProgress)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        var sendData : [String:Any] = ["location":"\(self.location)"]
+        sendData["origin"] = SERVER_KEY
+        print("Send Data = \(sendData)")
+        var sendDataArray = [Any]()
+        sendDataArray.append(sendData)
+        _ = cocoaMqtt!.publish(topic: self.topic, withString:sendDataArray.jsonString , qos: .QOS2)
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
