@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name = 'TookanTracker'
-s.version = '0.0.1'
+s.version = '0.0.2'
 s.summary = 'Now add Tookan Tracker in app for quick tracking.'
 s.homepage = 'https://github.com/Jungle-Works/tookan-tracker-ios.git'
 s.documentation_url = 'https://docs.jungleworks.com/tookan/sdk/ios'
