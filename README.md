@@ -25,6 +25,10 @@ Make sure to initialize the SDK only one time. You can initialize SDK by "import
 
 TookanTracker.shared.delegate = self
 //
+Send MAP_TYPE
+TookanTracker.shared.initializeMap(mapType: mapType.text ?? "", key: mapKey.text ?? "")
+e.g : TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "enter map key")
+//
 Google API hit for ETA(In second)
 
 TookanTracker.shared.delayTimer = 60.0 ("By passing Double value into it.")
