@@ -10,6 +10,7 @@ import Foundation
 import GooglePlaces
 import GoogleMaps
 import CoreLocation
+import Mapbox
 
 @objc public protocol TookanTrackerDelegate {
     @objc optional func getCurrentCoordinates(_ location:CLLocation)
@@ -37,7 +38,9 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var uiNeeded = false
     var jobID = ""
     var isHideUserDetailOnTop = false
-   var completionHandler: ((_ viewC: UIViewController)->())?
+    var completionHandler: ((_ viewC: UIViewController)->())?
+    var mapType: MapType = .flightMap
+    public var flightMapKey = String()
     //completionHandler: ((_ mapViewController: UIViewController)->())?
     
     public func createSession(userID:String,isUINeeded:Bool, isHideUserDetailOnTop: Bool = true, completionHandler: ((_ mapViewController: UIViewController)->())?) {
@@ -55,8 +58,22 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
         self.isHideUserDetailOnTop = isHideUserDetailOnTop
         self.loc.trackingDelegate = self
     }
+
+    public func initializeMap(mapType: String, key: String) {
+        if let type = MapType(rawValue: mapType) {
+            self.mapType = type
+            switch type {
+            case .google:
+                self.googleMapKey = key
+            case .flightMap:
+                self.flightMapKey = key
+                MGLAccountManager.accessToken = key
+            }
+        }
+    }
     
     public func startTarckingByJob(sharedSecertId: String, jobId: String, userId: String){
+        self.jobArray.removeAll()
         NetworkingHelper.sharedInstance.getLocationForJobTracking(sharedSecert: sharedSecertId, jobId: jobId, userId: userId) { (isSucceeded, response) in
             DispatchQueue.main.async {
                 self.jobID = jobId

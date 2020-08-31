@@ -179,6 +179,29 @@ class NetworkingHelper: NSObject {
                }.resume()
        }
 
+    func fetchFlightRoute(_ from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, completionHandler: @escaping (String, [String: Any]) -> (), mapView: GMSMapView? = nil) -> (){
+        let session = URLSession.shared
+        let urlString = FlightMapUtils.getDirectionUrl(from, to: to)
+        print(urlString)
+        let url = URL(string: urlString)!
+        session.dataTask(with: url) { (data, response, error) in
+            if data != nil {
+                if let json = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any] {
+                    if let data = json["data"] as? [String: Any], let path = data["paths"] as? [[String: Any]], let points = path[0]["points"] as? String  {
+                        if let eta = path[0]["ETA_text"] as? String {
+                            completionHandler(points, ["text": eta])
+                        } else {
+                            completionHandler(points, [String: AnyObject]())
+                        }
+
+                    }
+                } else {
+                    completionHandler("", [String: AnyObject]())
+                }
+            }
+        }.resume()
+    }
+
     /*------------ Start Tracking ---------------*/
     func getLocationForStartTracking(_ sessionId:String, receivedResponse:@escaping (_ succeeded:Bool, _ response:[String:Any]) -> ()) {
         let params = [
