@@ -4,7 +4,7 @@ Install TookanTracker to see tracking to users of your iPhone app. The TookanTra
 Pre Requisites :
 TookanTracker supports iOS 9.0 and above
 Xcode
-If you have any queries during the integration, please reach out to us at support@fuguchat.com
+If you have any queries during the integration, please reach out to us at contact@tookanapp.com
 
 Step 1: Install using CocoaPods
 TookanTracker is available through CocoaPods. To add TookanTracker to your project, add the SDK to your Podfile as shown below.
@@ -24,11 +24,16 @@ Step 2: Initialize SDK
 Make sure to initialize the SDK only one time. You can initialize SDK by "import TookanTracker" to your file.
 
 TookanTracker.shared.delegate = self
+
 //
 Send MAP_TYPE
+
 TookanTracker.shared.initializeMap(mapType: mapType.text ?? "", key: mapKey.text ?? "")
+
 e.g : TookanTracker.shared.initializeMap(mapType: "FLIGHT_MAP", key: "enter map key")
+
 //
+
 Google API hit for ETA(In second)
 
 TookanTracker.shared.delayTimer = 60.0 ("By passing Double value into it.")
@@ -62,4 +67,5 @@ TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", job
 Step 3: Stop Tracking
 
 You can stop listening location using below method.
+TookanTracker.shared.stopTracking(sessionID: self.sessionId)
 
