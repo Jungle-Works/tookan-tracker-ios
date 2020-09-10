@@ -38,9 +38,6 @@ Google API hit for ETA(In second)
 
 TookanTracker.shared.delayTimer = 60.0 ("By passing Double value into it.")
 
-Google MAP key for intitialize google map.
-
-TookanTracker.shared.googleMapKey = "YOUR_GOOGLE_MAP_API_KEY"
 
 Note:-
 if you don't want to use google api hit for ETA and path, then use trackerOptions.setPathUpdateTimer(-1)
@@ -56,6 +53,7 @@ TookanTracker.shared.createSession(userID: "Provide Tookan Dashboard User ID", i
 //isHideUserDetailOnTop = false
 
 // By default it is true
+
 TookanTracker.shared.createSession(userID: "Provide Tookan Dashboard User ID",isUINeeded: false, isHideUserDetailOnTop: false, completionHandler: { (viewC) in
     self.navigationController?.pushViewController(viewC, animated: true)
 })
@@ -67,5 +65,6 @@ TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", job
 Step 3: Stop Tracking
 
 You can stop listening location using below method.
-TookanTracker.shared.stopTracking(sessionID: self.sessionId)
+
+TookanTracker.shared.stopTracking()
 

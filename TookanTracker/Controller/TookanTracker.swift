@@ -40,6 +40,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var isHideUserDetailOnTop = false
     var completionHandler: ((_ viewC: UIViewController)->())?
     var mapType: MapType = .flightMap
+    var sessionId = ""
     public var flightMapKey = String()
     //completionHandler: ((_ mapViewController: UIViewController)->())?
     
@@ -123,6 +124,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                      if let data = response["data"] as? [String:Any]{
                         self.agentDetailModel = AgentDetailModel(json: data)
                         sessionID = "\(data["session_id"] ?? "")"
+                        self.sessionId = sessionID
                         self.delegate.getSessionId?(sessionId: sessionID)
                         UserDefaults.standard.set(sessionID, forKey: USER_DEFAULT.sessionId)
                     }
@@ -243,9 +245,9 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     }
     
     
-    public func stopTracking(sessionID: String) {
+    public func stopTracking() {
         self.loc.sendLastLocation()
-        NetworkingHelper.sharedInstance.stopTracking(sessionID, userID: globalUserId, apiKey: globalAPIKey) { (isSucceeded, response) in
+        NetworkingHelper.sharedInstance.stopTracking(self.sessionId, userID: globalUserId, apiKey: globalAPIKey) { (isSucceeded, response) in
             if isSucceeded == true {
                 self.loc.stopLocationService()
                 self.model.resetAllData()
