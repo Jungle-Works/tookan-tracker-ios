@@ -44,11 +44,10 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     public var flightMapKey = String()
     //completionHandler: ((_ mapViewController: UIViewController)->())?
     
-    public func createSession(userID:String,isUINeeded:Bool, isHideUserDetailOnTop: Bool = true, completionHandler: ((_ mapViewController: UIViewController)->())?) {
+    public func createSession(userID:String, isHideUserDetailOnTop: Bool = true, completionHandler: ((_ mapViewController: UIViewController)->())?) {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
-        self.uiNeeded = isUINeeded
         globalUserId = userID
        self.completionHandler =  completionHandler
 
@@ -187,7 +186,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     }
     
     func initHome() {
-        let storyboard = UIStoryboard(name: STORYBOARD_NAME.main, bundle: frameworkBundle)
+        let storyboard = UIStoryboard(name: "Map", bundle: frameworkBundle)
         if let home  = storyboard.instantiateViewController(withIdentifier: STORYBOARD_ID.home) as? HomeController {
             home.trackingDelegate = self
             home.jobModel = self.jobModel

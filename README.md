@@ -45,10 +45,9 @@ if you don't want to use google api hit for ETA and path, then use trackerOption
 By default path update timer is 1 minute.
 // Setting up the SDK
 
-TookanTracker.shared.createSession(userID: "Provide Tookan Dashboard User ID", isUINeeded: false, completionHandler: { (viewC) in
-    self.navigationController?.pushViewController(viewC, animated: true)
+TookanTracker.shared.createSession(userID: "\(self.userIdTextField.text ?? "")", isHideUserDetailOnTop: true, completionHandler: { (viewC) in
+self.navigationController?.pushViewController(viewC, animated: true)
 })
-
 // To Unhide User Detail view set isHideUserDetailOnTop to false
 //isHideUserDetailOnTop = false
 

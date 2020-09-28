@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name = 'TookanTracker'
-s.version = '0.0.7'
+s.version = '0.0.8'
 s.summary = 'Now add Tookan Tracker in app for quick tracking.'
 s.homepage = 'https://github.com/Jungle-Works/tookan-tracker-ios.git'
 s.documentation_url = 'https://docs.jungleworks.com/tookan/sdk/ios'
@@ -17,7 +17,10 @@ s.static_framework = true
 
 s.source_files = 'TookanTracker/**/*.{h,m,swift,c}'
 s.resources = 'TookanTracker/**/*.{png,jpeg,jpg,storyboard,xib}'
-
+s.pod_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+  }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
 s.dependency 'GoogleMaps'
 s.dependency 'GooglePlaces'
