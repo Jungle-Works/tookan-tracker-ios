@@ -226,26 +226,29 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
         return coordinate
     }
-    func  getLatitudeLongitudeOfDest() -> CLLocationCoordinate2D?{
+    func getLatitudeLongitudeOfDest() -> CLLocationCoordinate2D?{
         var coordinate: CLLocationCoordinate2D!
         var latitudeString:String!
         var longitudeString:String!
         if TookanTracker.shared.jobArrayCount > 1{
             for i in (0..<TookanTracker.shared.jobArray.count){
                 if TookanTracker.shared.jobArray[i].jobId == TookanTracker.shared.jobID{
-                    if self.jobData?.jobPickupLat != "" {
+                    //                    if self.jobData?.jobPickupLat != "" {
+                    if TookanTracker.shared.jobArray[i].jobType == "1" {
+                        latitudeString = TookanTracker.shared.jobArray[i].jobLat
+                        longitudeString = TookanTracker.shared.jobArray[i].jobLng
+                        
+                    } else {
                         latitudeString = TookanTracker.shared.jobArray[i].jobPickupLat
                         longitudeString = TookanTracker.shared.jobArray[i].jobPickupLng
-
                     }
-                    
                 }
             }
         }else{
             latitudeString = jobData?.jobPickupLat ?? ""
             longitudeString = jobData?.jobPickupLng ?? ""
         }
-
+        
         coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
         return coordinate
     }
@@ -258,35 +261,43 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             CATransaction.begin()
             CATransaction.setValue(NSNumber(value: 1), forKey: kCATransactionAnimationDuration)
             let path = GMSPath(fromEncodedPath: encodedPathString)
-            switch self.jobData?.jobStatus{
-            case JOB_STATUS.started, JOB_STATUS.arrived:
-                self.mapPolyline.map = nil
-                self.mapPolyline = GMSPolyline(path: path)
-                self.mapPolyline.strokeWidth = 4.0
-                self.mapPolyline.strokeColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
-                self.mapPolyline.geodesic = true
-                self.mapPolyline.isTappable = true
-                self.mapPolyline.map = self.googleMapView//mapPolyline
-
-                //flight polyline
-                if let locationArray = NetworkingHelper.sharedInstance.decodePolylineForCoordinates(encodedPathString) {
-                    self.flightMapView?.removeAnnotation(self.flightPolyline)
-                    var coordinates = [CLLocationCoordinate2D]()
-                    for location in locationArray {
-                        coordinates.append(location.coordinate)
+            for i in (0..<TookanTracker.shared.jobArrayCount){
+                if TookanTracker.shared.jobArray[i].jobId == TookanTracker.shared.jobID{
+                    
+                    if self.jobData?.jobPickupLat != "" {
+                        print("yea \(i)")
+                        switch TookanTracker.shared.jobArray[i].jobStatus{
+                        case JOB_STATUS.started, JOB_STATUS.arrived:
+                            self.mapPolyline.map = nil
+                            self.mapPolyline = GMSPolyline(path: path)
+                            self.mapPolyline.strokeWidth = 4.0
+                            self.mapPolyline.strokeColor = UIColor(red: 70/255, green: 149/255, blue: 246/255, alpha: 1.0)
+                            self.mapPolyline.geodesic = true
+                            self.mapPolyline.isTappable = true
+                            self.mapPolyline.map = self.googleMapView//mapPolyline
+                            
+                            //flight polyline
+                            if let locationArray = NetworkingHelper.sharedInstance.decodePolylineForCoordinates(encodedPathString) {
+                                self.flightMapView?.removeAnnotation(self.flightPolyline)
+                                var coordinates = [CLLocationCoordinate2D]()
+                                for location in locationArray {
+                                    coordinates.append(location.coordinate)
+                                }
+                                self.flightPolyline = MGLPolyline(coordinates: coordinates, count: UInt(coordinates.count))
+                                self.flightMapView?.addAnnotation(self.flightPolyline)
+                            }
+                            
+                            
+                            break
+                        default:
+                            self.endPointMarker?.title = ""
+                            self.flightEndMarker.title = ""
+                            break
+                        }
                     }
-                    self.flightPolyline = MGLPolyline(coordinates: coordinates, count: UInt(coordinates.count))
-                    self.flightMapView?.addAnnotation(self.flightPolyline)
+                    
                 }
-
-
-                break
-            default:
-                self.endPointMarker?.title = ""
-                self.flightEndMarker.title = ""
-                break
             }
-
 
             var bounds = GMSCoordinateBounds()
             if setBoundOnlyOnOrigin == true{
@@ -1408,7 +1419,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 let sequence = stride(from: first, to: last, by: interval)
                 for element in sequence {
                     let cateAryrray = TookanTracker.shared.jobArray[element]
-                    if TookanTracker.shared.jobArray[element].jobId != TookanTracker.shared.jobID{
+                    if TookanTracker.shared.jobArray[element].jobId == TookanTracker.shared.jobID{
                         switch cateAryrray.jobType {
                         case "0":
                             if imageString != ""{
@@ -1825,4 +1836,5 @@ extension HomeController: MGLMapViewDelegate {
     }
 
 }
+
 
