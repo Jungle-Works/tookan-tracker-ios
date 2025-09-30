@@ -1,39 +1,34 @@
 Pod::Spec.new do |s|
+s.name = 'TookanTracker'
+s.version = '0.0.9'
+s.summary = 'Now add Tookan Tracker in app for quick tracking.'
+s.homepage = 'https://github.com/Jungle-Works/tookan-tracker-ios.git'
+s.documentation_url = 'https://docs.jungleworks.com/tookan/sdk/ios'
 
-# 1
-s.platform = :ios
-s.ios.deployment_target = '12.0'
-s.name = "TrackingSdk"
-s.summary = "TrackingSdk lets a user select an ice cream flavor."
-s.requires_arc = true
+s.license = { :type => 'MIT', :file => 'FILE_LICENSE' }
 
-# 2
-s.version = "0.2.0"
+s.author = { 'Mukul Kansal' => 'mukul.kansal@jungleworks.com' }
 
-# 3
-s.license = { :type => "MIT", :file => "LICENSE" }
+s.source = { :git => 'https://github.com/Jungle-Works/tookan-tracker-ios.git', :tag => s.version }
+s.ios.deployment_target = '9.0'
 
-# 4 - Replace with your name and e-mail address
-s.author = { "Mukul Kansal" => "mukul.kansal@jungleworks.com" }
+#s.exclude_files = 'TookanTracker/TookanTracker/DemoApp'
+s.static_framework = true
 
-# 5 - Replace this URL with your own GitHub page's URL (from the address bar)
-s.homepage = "https://github.com/Jungle-Works/tookan-tracker-ios.git"
+s.source_files = 'TookanTracker/**/*.{h,m,swift,c}'
+s.resources = 'TookanTracker/**/*.{png,jpeg,jpg,storyboard,xib}'
+s.pod_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+  }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
-# 6 - Replace this URL with your own Git URL from "Quick Setup"
-s.source = { :git => "https://github.com/Jungle-Works/tookan-tracker-ios.git",
-             :tag => "#{s.version}" }
-
-# 7
-s.framework = "UIKit"
+s.dependency 'GoogleMaps'
+s.dependency 'GooglePlaces'
+s.dependency 'CocoaAsyncSocket'
+s.dependency 'Flightmap-SDK-iOS'
+#s.static_framework = true
 
 
-# 8
-s.source_files = "TookanTracker/**/*.{swift}"
-s.exclude_files = "TookanTracker/DemoApp"
-# 9
-s.resources = "TookanTracker/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
-
-# 10
-s.swift_version = "5.0"
+s.swift_version = '5.0'
 
 end
