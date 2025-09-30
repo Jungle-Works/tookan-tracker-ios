@@ -8,7 +8,7 @@ s.summary = "TrackingSdk lets a user select an ice cream flavor."
 s.requires_arc = true
 
 # 2
-s.version = "0.1.0"
+s.version = "0.2.0"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
@@ -17,10 +17,10 @@ s.license = { :type => "MIT", :file => "LICENSE" }
 s.author = { "Mukul Kansal" => "mukul.kansal@jungleworks.com" }
 
 # 5 - Replace this URL with your own GitHub page's URL (from the address bar)
-s.homepage = "https://github.com/tookanapp/tookan-tracker-ios"
+s.homepage = "https://github.com/Jungle-Works/tookan-tracker-ios.git"
 
 # 6 - Replace this URL with your own Git URL from "Quick Setup"
-s.source = { :git => "https://github.com/tookanapp/tookan-tracker-ios.git",
+s.source = { :git => "https://github.com/Jungle-Works/tookan-tracker-ios.git",
              :tag => "#{s.version}" }
 
 # 7
