@@ -12,7 +12,9 @@ s.author = { 'Mukul Kansal' => 'mukul.kansal@jungleworks.com' }
 s.source = { :git => 'https://github.com/Jungle-Works/tookan-tracker-ios.git', :tag => s.version }
 s.ios.deployment_target = '9.0'
 
-s.exclude_files = 'TookanTracker/TookanTracker/DemoApp'
+s.exclude_files = [
+  'TookanTracker/TookanTracker/DemoApp/**/*'
+]
 s.static_framework = true
 
 s.source_files = 'TookanTracker/**/*.{h,m,swift,c}'
