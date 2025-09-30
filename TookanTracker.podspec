@@ -13,7 +13,7 @@ s.source = { :git => 'https://github.com/Jungle-Works/tookan-tracker-ios.git', :
 s.ios.deployment_target = '9.0'
 
 s.exclude_files = [
-  'TookanTracker/TookanTracker/DemoApp/**/*'
+  'TookanTracker/DemoApp/**/*'
 ]
 s.static_framework = true
 
