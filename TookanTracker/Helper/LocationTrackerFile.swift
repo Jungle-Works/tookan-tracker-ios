@@ -141,9 +141,7 @@ open class LocationTrackerFile:NSObject, CLLocationManagerDelegate, MKMapViewDel
     open func initMqtt() {
         MqttClass.sharedInstance.mqttSetting()
         MqttClass.sharedInstance.topic = LocationTrackerFile.sharedInstance().sessionId
-        if MqttClass.sharedInstance.connectVar != true{
         MqttClass.sharedInstance.connectToServer()
-        }
         self.subsribeMQTTForTracking()
     }
     

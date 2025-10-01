@@ -29,7 +29,7 @@ open class MqttClass: NSObject {
     
     func connectToServer() {
         _ = cocoaMqtt!.connect()
-        self.connectVar = true
+//        self.connectVar = true
     }
     
     func mqttSetting() {
@@ -106,7 +106,7 @@ extension MqttClass: CocoaMQTTDelegate {
         if UserDefaults.standard.bool(forKey: "subscribeLocation") == true {
             if(mqtt.connState == CocoaMQTTConnState.DISCONNECTED) {
                 self.mqttSetting()
-                self.connectToServer()
+//                self.connectToServer()
 
             }
         }
