@@ -1374,14 +1374,14 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         }
         
         
-        if coordinate == nil {
-            coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
-            coordinate = CLLocationCoordinate2D()
-        }
+//        if coordinate == nil {
+//            coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
+//            coordinate = CLLocationCoordinate2D()
+//        }
         let destinationCoordinate = self.getLatitudeLongitudeOfDest()
         self.movingMarker(originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), bearing: Double(bearing))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+TookanTracker.shared.delayTimer, execute: {
-            NetworkingHelper.sharedInstance.fetchFlightRoute(coordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
+//            NetworkingHelper.sharedInstance.fetchFlightRoute(coordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
                 //            NetworkingHelper.sharedInstance.getPath(coordinate: coordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
                 if points.count > 0 {
                     self.drawPath(points, originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin: 0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: true)
