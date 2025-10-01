@@ -246,15 +246,21 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     
     public func stopTracking() {
         self.loc.sendLastLocation()
-        NetworkingHelper.sharedInstance.stopTracking(self.sessionId, userID: globalUserId, apiKey: globalAPIKey) { (isSucceeded, response) in
-            if isSucceeded == true {
-                self.loc.stopLocationService()
-                self.model.resetAllData()
-                UserDefaults.standard.removeObject(forKey: USER_DEFAULT.userId)
-                UserDefaults.standard.removeObject(forKey: USER_DEFAULT.apiKey)
-                UserDefaults.standard.removeObject(forKey: USER_DEFAULT.isLocationTrackingRunning)
-            }
-        }
+        self.loc.stopLocationService()
+        self.model.resetAllData()
+        UserDefaults.standard.removeObject(forKey: USER_DEFAULT.userId)
+        UserDefaults.standard.removeObject(forKey: USER_DEFAULT.apiKey)
+        UserDefaults.standard.removeObject(forKey: USER_DEFAULT.isLocationTrackingRunning)
+        print("tracking stopped")
+//        NetworkingHelper.sharedInstance.stopTracking(self.sessionId, userID: globalUserId, apiKey: globalAPIKey) { (isSucceeded, response) in
+//            if isSucceeded == true {
+//                self.loc.stopLocationService()
+//                self.model.resetAllData()
+//                UserDefaults.standard.removeObject(forKey: USER_DEFAULT.userId)
+//                UserDefaults.standard.removeObject(forKey: USER_DEFAULT.apiKey)
+//                UserDefaults.standard.removeObject(forKey: USER_DEFAULT.isLocationTrackingRunning)
+//            }
+//        }
     }
 }
 

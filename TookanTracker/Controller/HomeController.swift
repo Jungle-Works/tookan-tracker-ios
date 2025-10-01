@@ -532,22 +532,13 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         let destinationCoordinate = self.getLatitudeLongitudeOfDest()
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
-            NetworkingHelper.sharedInstance.fetchFlightRoute(originCoordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
-                if points.count > 0 {
-                    self.drawPath(points, originCoordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate:destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: false)
-                } else {
-                    self.setMarker(originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20,durationDict:durationDict)
-                }
-            })
-
-
-            //        NetworkingHelper.sharedInstance.getPath(coordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
-            //            if points.count > 0 {
-            //                self.drawPath(points, originCoordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate:destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: false)
-            //            } else {
-            //                self.setMarker(originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20,durationDict:durationDict)
-            //            }
-            //        }, mapview: self.googleMapView ?? GMSMapView())
+                    NetworkingHelper.sharedInstance.getPath(coordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
+                        if points.count > 0 {
+                            self.drawPath(points, originCoordinate: originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate:destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: false)
+                        } else {
+                            self.setMarker(originCoordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin:0.5 + 20,durationDict:durationDict)
+                        }
+                    }, mapview: self.googleMapView ?? GMSMapView())
         })
     }
     
@@ -897,7 +888,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     func stopCalling(pop: Bool) {
         let alertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: UIAlertController.Style.actionSheet)
         let confirmAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.destructive) { (confirmed) -> Void in
-            TookanTracker.shared.jobArray.removeAll()
+//            TookanTracker.shared.jobArray.removeAll()
             self.stopTrackingButton.isHidden = true
             self.dismissVC()
         }
@@ -1377,18 +1368,17 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         if coordinate == nil {
             coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
             coordinate = CLLocationCoordinate2D()
-            print("hello from karan")
+            print("Coordinates")
         }
         let destinationCoordinate = self.getLatitudeLongitudeOfDest()
         self.movingMarker(originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), bearing: Double(bearing))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+TookanTracker.shared.delayTimer, execute: {
-//            NetworkingHelper.sharedInstance.fetchFlightRoute(coordinate ?? CLLocationCoordinate2D(), to: destinationCoordinate ?? CLLocationCoordinate2D(), completionHandler: { (points, durationDict) in
-                //            NetworkingHelper.sharedInstance.getPath(coordinate: coordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
+            NetworkingHelper.sharedInstance.getPath(coordinate: coordinate ?? CLLocationCoordinate2D(), destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), completionHander: { (points,durationDict) in
                 if points.count > 0 {
                     self.drawPath(points, originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), minOrigin: 0.5 + 20, durationDict: durationDict, setBoundOnlyOnOrigin: true)
                 }
                 
-            })
+            }, mapview: self.googleMapView ?? GMSMapView())
         })
     }
     func movingMarker(originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D, bearing: Double? = 0.0){
