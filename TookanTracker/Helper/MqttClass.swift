@@ -29,7 +29,6 @@ open class MqttClass: NSObject {
     
     func connectToServer() {
         _ = cocoaMqtt!.connect()
-//        self.connectVar = true
     }
     
     func mqttSetting() {
@@ -106,7 +105,6 @@ extension MqttClass: CocoaMQTTDelegate {
         if UserDefaults.standard.bool(forKey: "subscribeLocation") == true {
             if(mqtt.connState == CocoaMQTTConnState.DISCONNECTED) {
                 self.mqttSetting()
-//                self.connectToServer()
 
             }
         }
@@ -191,6 +189,7 @@ extension MqttClass: CocoaMQTTDelegate {
             }
                 if latitudeString != nil && longitudeString != nil  {
                     let coordinate = CLLocationCoordinate2D(latitude: latitudeString!, longitude: longitudeString!)
+                    TookanTracker.shared.delegate.getCurrentCoordinates!(CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
                     locationDictionary = [
                         "Latitude":coordinate.latitude,
                         "Longitude":coordinate.longitude,
