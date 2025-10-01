@@ -29,6 +29,8 @@ open class MqttClass: NSObject {
     
     func connectToServer() {
         _ = cocoaMqtt!.connect()
+        self.connectVar = true
+
     }
     
     func mqttSetting() {
@@ -100,11 +102,14 @@ open class MqttClass: NSObject {
 extension MqttClass: CocoaMQTTDelegate {
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: NSError?) {
         didConnectAck = false
+        self.connectVar = false
         _console("mqttDidDisconnect")
         print(err?.localizedDescription ?? "error")
         if UserDefaults.standard.bool(forKey: "subscribeLocation") == true {
             if(mqtt.connState == CocoaMQTTConnState.DISCONNECTED) {
                 self.mqttSetting()
+                self.connectToServer()
+
 
             }
         }
