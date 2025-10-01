@@ -1374,10 +1374,11 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         }
         
         
-//        if coordinate == nil {
-//            coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
-//            coordinate = CLLocationCoordinate2D()
-//        }
+        if coordinate == nil {
+            coordinate = CLLocationCoordinate2D(latitude: 30.741482, longitude: 76.768066)
+            coordinate = CLLocationCoordinate2D()
+            print("hello from karan")
+        }
         let destinationCoordinate = self.getLatitudeLongitudeOfDest()
         self.movingMarker(originCoordinate: coordinate!, destinationCoordinate: destinationCoordinate ?? CLLocationCoordinate2D(), bearing: Double(bearing))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+TookanTracker.shared.delayTimer, execute: {
