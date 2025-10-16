@@ -31,7 +31,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var jobArray = [Jobs]()
     public var getETA = ""
     public var apiKey = ""
-    public var delayTimer = 60.0
+    public var delayTimer = 1.0
     public var googleMapKey = ""
     public var jobArrayCount = 0
     var locationManager:CLLocationManager!
