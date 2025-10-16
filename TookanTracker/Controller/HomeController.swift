@@ -66,6 +66,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     var mapPolyline = GMSPolyline()
     var flightPolyline = MGLPolyline()
     var isHideTopUserDetailView = false
+
     override var preferredStatusBarStyle:UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return .darkContent
@@ -442,6 +443,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             self.flightMapView?.selectAnnotation(self.flightEndMarker, animated: false, completionHandler: nil)
             
             if let eta = self.getETA {
+                TookanTracker.shared.getETA = self.etaDict
                 eta(self.etaDict)
             }
             if TookanTracker.shared.jobArrayCount > 1{

@@ -42,6 +42,8 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var mapType: MapType = .flightMap
     var sessionId = ""
     public var flightMapKey = String()
+    var etaCallback: (()->())?
+
     //completionHandler: ((_ mapViewController: UIViewController)->())?
     
     public func createSession(userID:String, isHideUserDetailOnTop: Bool = true, completionHandler: ((_ mapViewController: UIViewController)->())?) {
@@ -196,6 +198,10 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                 if eta != "" {
                     self.getETA = eta
                 }
+            }
+            TookanTracker.shared.etaCallback = {
+                print("updatepath called")
+                home.updatePath()
             }
             home.isHideTopUserDetailView = isHideUserDetailOnTop
             if let completion = self.completionHandler {

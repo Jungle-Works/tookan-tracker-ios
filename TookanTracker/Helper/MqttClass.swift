@@ -207,6 +207,8 @@ extension MqttClass: CocoaMQTTDelegate {
                     UserDefaults.standard.setValue(updatingLocationArray, forKey: USER_DEFAULT.updatingLocationPathArray)
                 }
             }
+            TookanTracker.shared.etaCallback?()
+            print("callback called")
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: OBSERVER.updatePath), object: nil)
         }
         }
