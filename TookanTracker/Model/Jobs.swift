@@ -31,6 +31,7 @@ class Jobs: NSObject{
     var fleetStatus = ""
     var fleetThumbImage = ""
     var userID = ""
+    var logo = ""
     override init() {
         
     }
@@ -42,6 +43,10 @@ class Jobs: NSObject{
         
         if let value = json["job_address"] as? String{
             self.jobAddress = value
+        }
+        
+        if let value = json["logo"] as? String{
+            self.logo = value
         }
         
         if let value = json["job_hash"] as? String{

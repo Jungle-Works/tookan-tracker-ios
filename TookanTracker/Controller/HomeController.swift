@@ -312,7 +312,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 let flightCoordinates: [CLLocationCoordinate2D] = [originCoordinate, destinationCoordinate]
                 self.flightMapView?.setVisibleCoordinates(flightCoordinates, count: UInt(flightCoordinates.count), edgePadding: UIEdgeInsets(top: 200.0, left: 100.0, bottom: 100.0, right: 100.0), animated: true)
 
-                let imageString = ""//"https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
+                let imageString = TookanTracker.shared.imgUrl//"https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
                 if imageString != ""{
                     if let image = self.getImage(from: imageString ){
                         self.startingPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
@@ -326,7 +326,12 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 // Flight map start point marker
                 self.flightStartMarker.coordinate = originCoordinate
                 self.flightMapView?.addAnnotation(self.flightStartMarker)
-                self.flightMapView?.printCurrentMarker(with: UIImage(named: "car", in: frameworkBundle, compatibleWith: nil), annotation: self.flightStartMarker)
+                if imageString != ""{
+                    self.flightMapView?.printCurrentMarker(with: UIImage(named: TookanTracker.shared.imgUrl, in: frameworkBundle, compatibleWith: nil), annotation: self.flightStartMarker)
+                }else{
+                    self.flightMapView?.printCurrentMarker(with: UIImage(named: "car", in: frameworkBundle, compatibleWith: nil), annotation: self.flightStartMarker)
+                }
+               
 
 
             }
@@ -555,8 +560,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     func setMarker(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat,durationDict: [String:Any]?){
         googleMapView?.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         let imageString = ""//"https://tookan.s3.amazonaws.com/fleet_thumb_profile/thumb-LvgR1581675711907-KCd31581675711258178198rng2w.jpg"
-        if imageString != ""{
-            if let image = self.getImage(from: imageString ){
+        let imgurl = TookanTracker.shared.imgUrl
+        if imgurl != ""{
+            if let image = self.getImage(from: imgurl ){
                 self.startingPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
             }
         }else{
@@ -677,8 +683,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     func setMarkerForJob(_ originCoordinate: CLLocationCoordinate2D, destinationCoordinate: CLLocationCoordinate2D, minOrigin:CGFloat){
         googleMapView?.padding = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         let imageString = ""
-        if imageString != ""{
-            if let image = self.getImage(from: imageString ){
+        let imgurl = TookanTracker.shared.imgUrl
+        if imgurl != ""{
+            if let image = self.getImage(from: imgurl ){
                 self.startingPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
             }
         }else{
@@ -963,7 +970,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
     }
     
     func dismissVC() {
-        self.trackingDelegate.logout!()
+//        self.trackingDelegate.logout!()
         self.navigationController?.popToRootViewController(animated: true)
         UserDefaults.standard.removeObject(forKey: USER_DEFAULT.userId)
         UserDefaults.standard.removeObject(forKey: USER_DEFAULT.apiKey)
@@ -1405,8 +1412,9 @@ class HomeController: UIViewController, LocationTrackerDelegate {
             // flightmap camera position
             self.flightMapView?.setCenter(originCoordinate, zoomLevel: 15.0, animated: true)
             let imageString = ""
-            if imageString != ""{
-                if let image = self.getImage(from: imageString ){
+            let imgurl = TookanTracker.shared.imgUrl
+            if imgurl != ""{
+                if let image = self.getImage(from: imgurl ){
                     self.startingPointMarker?.icon = self.image(image, scaledToSize: CGSize(width: 22, height: 22))
                 }
             }else{

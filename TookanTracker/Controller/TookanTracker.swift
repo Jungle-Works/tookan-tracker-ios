@@ -41,6 +41,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     var completionHandler: ((_ viewC: UIViewController)->())?
     var mapType: MapType = .flightMap
     var sessionId = ""
+    var imgUrl:String = ""
     public var flightMapKey = String()
     //completionHandler: ((_ mapViewController: UIViewController)->())?
     
@@ -81,6 +82,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
                 if isSucceeded == true{
                     if let data = response["data"] as? [String:Any]{
                         self.jobModel = JobModel(json: data)
+                        self.imgUrl = data["tracking_icon"] as? String ?? ""
                         if let jobdata = data["jobs_data"] as? [String:Any]{
                             self.jobData = JobData(json: jobdata)
                             if let job = jobdata["jobs"] as? [Any] {
