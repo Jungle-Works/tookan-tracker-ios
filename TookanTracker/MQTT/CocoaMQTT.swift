@@ -209,7 +209,10 @@ public class CocoaMQTT: NSObject, CocoaMQTTClient, GCDAsyncSocketDelegate, Cocoa
 
     public func connect() -> Bool {
         socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
-        reader = CocoaMQTTReader(socket: socket!, delegate: self)
+        guard let soc = socket else {
+                   return false
+               }
+        reader = CocoaMQTTReader(socket: soc, delegate: self)
         do {
             NSLog("host = %@", self.host)
             NSLog("Port = %d", self.port)
@@ -269,12 +272,12 @@ public class CocoaMQTT: NSObject, CocoaMQTTClient, GCDAsyncSocketDelegate, Cocoa
 
     public func disconnect() {
         send(frame: CocoaMQTTFrame(type: CocoaMQTTFrameType.DISCONNECT), tag: -0xE0)
-        socket!.disconnect()
+        socket?.disconnect()
     }
 
     func send(frame: CocoaMQTTFrame, tag: Int = 0) {
         let data = frame.data()
-        socket!.write(NSData(bytes: data, length: data.count) as Data, withTimeout: -1, tag: tag)
+        socket?.write(NSData(bytes: data, length: data.count) as Data, withTimeout: -1, tag: tag)
     }
 
     func sendConnectFrame() {
