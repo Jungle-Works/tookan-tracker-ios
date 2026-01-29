@@ -216,7 +216,7 @@ public class CocoaMQTT: NSObject, CocoaMQTTClient, GCDAsyncSocketDelegate, Cocoa
         do {
             NSLog("host = %@", self.host)
             NSLog("Port = %d", self.port)
-            try socket!.connect(toHost: self.host, onPort: self.port)
+            try soc.connect(toHost: self.host, onPort: self.port)
             connState = CocoaMQTTConnState.CONNECTING
             return true
         } catch let error as NSError {

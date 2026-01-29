@@ -49,7 +49,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
     public func createSession(userID:String, isHideUserDetailOnTop: Bool = true, completionHandler: ((_ mapViewController: UIViewController)->())?) {
         locationManager = CLLocationManager()
         locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
         globalUserId = userID
        self.completionHandler =  completionHandler
 
@@ -149,7 +149,7 @@ public class TookanTracker: NSObject, CLLocationManagerDelegate {
         
         if status == .denied {
             locationManager = CLLocationManager()
-            locationManager.requestAlwaysAuthorization()
+            locationManager.requestWhenInUseAuthorization()
         } else if status == .authorizedWhenInUse || status == .authorizedAlways {
             
             if let _ = UserDefaults.standard.value(forKey: USER_DEFAULT.sessionId) as? String {
