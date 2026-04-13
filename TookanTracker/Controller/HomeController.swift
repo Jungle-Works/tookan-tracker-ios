@@ -226,32 +226,67 @@ class HomeController: UIViewController, LocationTrackerDelegate {
         coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
         return coordinate
     }
-    func getLatitudeLongitudeOfDest() -> CLLocationCoordinate2D?{
-        var coordinate: CLLocationCoordinate2D!
-        var latitudeString:String!
-        var longitudeString:String!
-        if TookanTracker.shared.jobArrayCount > 1{
-            for i in (0..<TookanTracker.shared.jobArray.count){
-                if TookanTracker.shared.jobArray[i].jobId == TookanTracker.shared.jobID{
-                    //                    if self.jobData?.jobPickupLat != "" {
-                    if TookanTracker.shared.jobArray[i].jobType == "1" {
-                        latitudeString = TookanTracker.shared.jobArray[i].jobLat
-                        longitudeString = TookanTracker.shared.jobArray[i].jobLng
-                        
+    
+    func getLatitudeLongitudeOfDest() -> CLLocationCoordinate2D? {
+        
+        var latitudeString: String?
+        var longitudeString: String?
+        
+        if TookanTracker.shared.jobArrayCount > 1 {
+            for job in TookanTracker.shared.jobArray {
+                if job.jobId == TookanTracker.shared.jobID {
+                    
+                    if job.jobType == "1" {
+                        latitudeString = job.jobLat
+                        longitudeString = job.jobLng
                     } else {
-                        latitudeString = TookanTracker.shared.jobArray[i].jobPickupLat
-                        longitudeString = TookanTracker.shared.jobArray[i].jobPickupLng
+                        latitudeString = job.jobPickupLat
+                        longitudeString = job.jobPickupLng
                     }
                 }
             }
-        }else{
-            latitudeString = jobData?.jobPickupLat ?? ""
-            longitudeString = jobData?.jobPickupLng ?? ""
+        } else {
+            latitudeString = jobData?.jobPickupLat
+            longitudeString = jobData?.jobPickupLng
         }
         
-        coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
-        return coordinate
+        guard
+            let latString = latitudeString,
+            let lngString = longitudeString,
+            let lat = Double(latString),
+            let lng = Double(lngString)
+        else {
+            return nil
+        }
+        
+        return CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
+//    func getLatitudeLongitudeOfDest() -> CLLocationCoordinate2D?{
+//        var coordinate: CLLocationCoordinate2D!
+//        var latitudeString:String!
+//        var longitudeString:String!
+//        if TookanTracker.shared.jobArrayCount > 1{
+//            for i in (0..<TookanTracker.shared.jobArray.count){
+//                if TookanTracker.shared.jobArray[i].jobId == TookanTracker.shared.jobID{
+//                    //                    if self.jobData?.jobPickupLat != "" {
+//                    if TookanTracker.shared.jobArray[i].jobType == "1" {
+//                        latitudeString = TookanTracker.shared.jobArray[i].jobLat
+//                        longitudeString = TookanTracker.shared.jobArray[i].jobLng
+//                        
+//                    } else {
+//                        latitudeString = TookanTracker.shared.jobArray[i].jobPickupLat
+//                        longitudeString = TookanTracker.shared.jobArray[i].jobPickupLng
+//                    }
+//                }
+//            }
+//        }else{
+//            latitudeString = jobData?.jobPickupLat ?? ""
+//            longitudeString = jobData?.jobPickupLng ?? ""
+//        }
+//        
+//        coordinate = CLLocationCoordinate2D(latitude: Double(latitudeString) as! CLLocationDegrees, longitude: Double(longitudeString) as! CLLocationDegrees)
+//        return coordinate
+//    }
     func drawPath(_ encodedPathString: String, originCoordinate:CLLocationCoordinate2D, destinationCoordinate:CLLocationCoordinate2D, minOrigin:CGFloat, durationDict:[String : Any]?,setBoundOnlyOnOrigin:Bool?) -> Void{
         DispatchQueue.main.async {
             guard UIApplication.shared.applicationState == UIApplication.State.active else {
