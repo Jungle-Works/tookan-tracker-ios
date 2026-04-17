@@ -1376,7 +1376,7 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                 self.googleMapView?.clear()
                 self.flightMapView?.clear()
                 self.jobData?.jobStatus = id.jobStatus
-                if id.jobStatus == JOB_STATUS.successful {
+                if id.jobStatus == JOB_STATUS.successful  && id.jobType == "1"{
                     let alertController = UIAlertController(title: nil, message: "Task Successful", preferredStyle: .alert)
                     let alertAction = UIAlertAction(title: "Ok", style: .default) { (action) in
                         TookanTracker.shared.jobArray.removeAll()
@@ -1393,6 +1393,21 @@ class HomeController: UIViewController, LocationTrackerDelegate {
                         self.navigationController?.pushViewController(view, animated: false)
                     })
                     TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
+                }else if (id.pickup_completed == "1"){
+                    print("delivery start")
+                    self.trackingDelegate.logout?()
+
+                    if let deliveryJobId = id.deliveries?.first?.jobId {
+                        TookanTracker.shared.createSession(userID: id.userID,isHideUserDetailOnTop: true, completionHandler: { (view) in
+                            self.navigationController?.pushViewController(view, animated: false)
+                        })
+                        TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: "\(deliveryJobId)", userId: id.userID)
+                    }else{
+                        TookanTracker.shared.createSession(userID: id.userID,isHideUserDetailOnTop: true, completionHandler: { (view) in
+                            self.navigationController?.pushViewController(view, animated: false)
+                        })
+                        TookanTracker.shared.startTarckingByJob(sharedSecertId: "tookan-sdk-345#!@", jobId: id.jobId, userId: id.userID)
+                    }
                 }else{
                     TookanTracker.shared.createSession(userID: id.userID,isHideUserDetailOnTop: true, completionHandler: { (view) in
                         self.navigationController?.pushViewController(view, animated: false)

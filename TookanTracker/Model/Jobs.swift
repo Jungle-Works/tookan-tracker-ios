@@ -7,10 +7,19 @@
 //
 
 import Foundation
+struct Delivery {
+    let jobId: Int
+    
+    init?(json: [String: Any]) {
+        guard let jobId = json["job_id"] as? Int else { return nil }
+        self.jobId = jobId
+    }
+}
 
 class Jobs: NSObject{
 
-
+    var pickup_completed = ""
+    var deliveries: [Delivery]?
     var jobAddress = ""
     var jobHash = ""
     var jobId = ""
@@ -146,6 +155,15 @@ class Jobs: NSObject{
          }else if let value = json["user_id"] as? NSNumber{
              self.userID = "\(value)"
          }
+        if let value = json["pickup_completed"] as? String{
+                     self.pickup_completed = value
+                 }else if let value = json["pickup_completed"] as? NSNumber{
+                     self.pickup_completed = "\(value)"
+                 }
+                
+                if let deliveriesArray = json["deliveries"] as? [[String: Any]] {
+                    self.deliveries = deliveriesArray.compactMap { Delivery(json: $0) }
+                }
 
         
         
