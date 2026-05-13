@@ -25,7 +25,7 @@ s.pod_target_xcconfig = {
 s.dependency 'GoogleMaps'
 s.dependency 'GooglePlaces'
 s.dependency 'CocoaAsyncSocket'
-s.dependency 'Flightmap-SDK-iOS'
+s.dependency 'Flightmap-SDK-iOS', '1.0.2'
 #s.static_framework = true
 
 
